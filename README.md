@@ -23,7 +23,72 @@
 <br/>
 <br/>
 
-## 2. Team Members
+## 2. Local Development Setup
+
+### Prerequisites
+
+- Node.js 18+ and npm
+- A local TypeScript backend server (see [BACKEND_API.md](./BACKEND_API.md) for API specifications)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/hyogshin/kono-client.git
+   cd kono-client
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables**
+   ```bash
+   cp .env.example .env.development
+   ```
+   
+   Edit `.env.development` and update the values:
+   - `VITE_API_URL`: Your local backend URL (default: `http://localhost:8080`)
+   - `VITE_KAKAO_API_KEY`: Your Kakao OAuth API key (optional, for social login)
+
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+   
+   The application will be available at `http://localhost:5173`
+
+### Backend Setup
+
+You need to implement a TypeScript backend server that provides the required API endpoints. See [BACKEND_API.md](./BACKEND_API.md) for the complete API specification.
+
+**Key backend requirements:**
+- REST API endpoints for authentication, trading, wallet, and rankings
+- WebSocket support for real-time price updates (recommended)
+- CORS enabled for `http://localhost:5173`
+- Cookie-based session authentication
+- Initial user balance: ₩10,000,000
+
+### Building for Production
+
+```bash
+npm run build
+```
+
+The built files will be in the `dist/` directory.
+
+### Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+
+<br/>
+<br/>
+
+## 4. Team Members
 
 <div align="center">
 <table>
@@ -69,7 +134,7 @@
 <br/>
 <br/>
 
-## 3. Development Workflow
+## 5. Development Workflow
 
 * **Sprint 1:** Planning and design (UI, ERD, API specifications)
 * **Sprint 2:** MVP development and environment setup
@@ -78,7 +143,7 @@
 
 <br/>
 
-## 4. Tech Stack
+## 6. Tech Stack
 
 <div align=center> 
   <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> 
@@ -96,7 +161,7 @@
 
 <br/>
 
-## 5. Commit Convention
+## 7. Commit Convention
 
 | Type     | Description                                                               |
 | -------- | ------------------------------------------------------------------------- |
