@@ -3,7 +3,7 @@ import {
   getUserProfile,
   updateProfileImage,
   updateNickname,
-} from '../api/user';
+} from '../services/user';
 import { toast } from 'react-toastify';
 import { useAuth } from '../contexts/AuthContext';
 

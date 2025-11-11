@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Header from '../components/layout/Header';
-import { getRanksAllMe, getRanksDaily, getRanksDailyMe } from '../api/ranking';
-import { getRanksAll } from '../api/ranking';
+import { getRanksAllMe, getRanksDaily, getRanksDailyMe } from '../services/ranking';
+import { getRanksAll } from '../services/ranking';
 import { format } from 'date-fns';
 import { formatCurrency } from '../utils/formatter';
 import { LazyLoadImage } from 'react-lazy-load-image-component';

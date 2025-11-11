@@ -5,7 +5,7 @@ import Toast from '../common/Toast';
 import PurchaseCompleteModal from './PurchaseCompleteModal';
 import { useNavigate } from 'react-router-dom';
 import { formatAmount, formatCurrency } from '../../utils/formatter';
-import { marketBuy, marketSell } from '../../api/trade';
+import { marketBuy, marketSell } from '../../services/trade';
 
 interface TradeConfirmModalProps {
   isOpen: boolean;

@@ -7,7 +7,7 @@ import { formatDate, formatCurrency } from '../utils/formatter';
 import {
   getTransactions,
   Transaction as TransactionType,
-} from '../api/transaction';
+} from '../services/transaction';
 
 export default function Transaction() {
   const navigate = useNavigate();

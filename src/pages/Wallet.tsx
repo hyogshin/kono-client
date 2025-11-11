@@ -6,7 +6,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { FaHistory } from 'react-icons/fa';
 import { ROUTES } from '../config/routes';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
-import { getBalance, getHoldingCoins } from '../api/wallet';
+import { getBalance, getHoldingCoins } from '../services/wallet';
 import { formatCurrency } from '../utils/formatter';
 
 ChartJS.register(ArcElement, Tooltip, Legend);

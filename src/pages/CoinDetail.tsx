@@ -6,9 +6,9 @@ import TradingViewWidget from '../components/TradingViewWidget';
 import PriceInfo from '../components/PriceInfo'; // 수정된 PriceInfo 컴포넌트 임포트
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount, formatCurrency } from '../utils/formatter';
-import { isFavoriteCoin, addFavorite, removeFavorite } from '../api/favorite';
-import { getCoinName } from '../api/coin';
-import { getQuantityByTicker } from '../api/wallet';
+import { isFavoriteCoin, addFavorite, removeFavorite } from '../services/favorite';
+import { getCoinName } from '../services/coin';
+import { getQuantityByTicker } from '../services/wallet';
 
 // 코인 정보 인터페이스
 interface CoinData {

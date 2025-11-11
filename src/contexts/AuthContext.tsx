@@ -6,7 +6,7 @@ import React, {
   ReactNode,
 } from 'react';
 import axios from 'axios';
-import api from '../api/clients';
+import api from '../services/clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 
 // axios 전역 기본 설정

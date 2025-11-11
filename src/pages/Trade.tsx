@@ -3,9 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import TradeConfirmModal from '../components/modal/TradeConfirmModal';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount, formatCurrency } from '../utils/formatter';
-import { getCoinName } from '../api/coin';
-import { getBalance } from '../api/wallet';
-import { getQuantityByTicker } from '../api/wallet';
+import { getCoinName } from '../services/coin';
+import { getBalance } from '../services/wallet';
+import { getQuantityByTicker } from '../services/wallet';
 import Header from '../components/layout/Header.tsx';
 // 거래 타입 정의
 type TradeType = 'buy' | 'sell';

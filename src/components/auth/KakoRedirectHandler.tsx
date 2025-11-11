@@ -40,7 +40,7 @@ export default KakaoRedirectHandler;
 // import { useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import axios from 'axios';
-// import api from '../../api/clients';
+// import api from '../../services/clients';
 // const { Kakao } = window;
 
 // const KakaoRedirectHandler = () => {

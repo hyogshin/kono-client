@@ -15,7 +15,7 @@ import {
 } from 'react-icons/fa';
 import DarkModeToggle from '../components/theme/DarkModeToggle';
 import Modal from '../components/modal/Modal';
-import { withdrawUser } from '../api/user';
+import { withdrawUser } from '../services/user';
 import { toast } from 'react-toastify';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';

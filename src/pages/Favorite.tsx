@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { IoIosClose } from 'react-icons/io';
 import Header from '../components/layout/Header';
 import { formatAmount } from '../utils/formatter';
-import { getFavoriteList } from '../api/favorite';
+import { getFavoriteList } from '../services/favorite';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 
 export default function Favorites() {
