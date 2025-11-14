@@ -20,7 +20,7 @@ const DarkModeToggle: React.FC<DarkModeToggleProps> = ({
         checked={darkMode}
         onChange={toggleDarkMode}
         className={`${
-          darkMode ? 'bg-gray-800' : 'bg-gray-200'
+          darkMode ? 'bg-gray-600' : 'bg-gray-200'
         } relative inline-flex h-6 w-11 items-center rounded-full transition-colors`}
       >
         <span

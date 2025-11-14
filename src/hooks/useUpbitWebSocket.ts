@@ -1,32 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-
-interface TickerData {
-  type: string;
-  code: string;
-  opening_price: number;
-  high_price: number;
-  low_price: number;
-  trade_price: number;
-  prev_closing_price: number;
-  change: 'RISE' | 'EVEN' | 'FALL';
-  change_price: number;
-  signed_change_price: number;
-  change_rate: number;
-  signed_change_rate: number;
-  trade_volume: number;
-  acc_trade_volume_24h: number;
-  acc_trade_price_24h: number;
-  trade_date: string;
-  trade_time: string;
-  trade_timestamp: number;
-  acc_ask_volume: number;
-  acc_bid_volume: number;
-  highest_52_week_price: number;
-  highest_52_week_date: string;
-  lowest_52_week_price: number;
-  lowest_52_week_date: string;
-  timestamp: number;
-}
+import { API_ENDPOINTS } from '../config/apiEndpoints';
+import { LOG } from '../config/constants';
+import type { TickerData } from '../types';
 
 export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
   const [tickerData, setTickerData] = useState<Record<string, TickerData>>({});
@@ -34,21 +9,17 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
   const [error, setError] = useState<string | null>(null);
   const socket = useRef<WebSocket | null>(null);
 
-  // 심볼이 변경될 때마다 의존성 배열에 문자열로 직렬화된 값을 사용
   const symbolsKey = JSON.stringify(symbols);
 
   useEffect(() => {
-    // 심볼이 비어있으면 기본값으로 BTC 사용
     const symbolsToUse = symbols.length > 0 ? symbols : ['BTC'];
 
-    // socket.current = new WebSocket('wss://api.upbit.com/websocket/v1');
-    socket.current = new WebSocket('wss://api.playcono.com/ws/'); // 프록시 사용
+    socket.current = new WebSocket(API_ENDPOINTS.GET_WS_URL);
 
     socket.current.onopen = function () {
       setIsConnected(true);
       setError(null);
 
-      // 업비트 API 형식에 맞게 메시지 구성
       const message = [
         { ticket: 'test' },
         {
@@ -76,8 +47,7 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
             }));
           }
         } catch (error) {
-          console.error('JSON 파싱 오류:', error);
-          console.error('원본 데이터:', reader.result);
+          console.error(LOG.ERR.GENERAL.JSON_PARSE, error);
         }
       };
 
@@ -85,7 +55,7 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
     };
 
     socket.current.onerror = function (_error) {
-      setError('웹소켓 연결 오류가 발생했습니다.');
+      setError(LOG.ERR.GENERAL.WEBSOCKET_CONNECTION);
       setIsConnected(false);
     };
 
@@ -98,7 +68,7 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
         socket.current.close();
       }
     };
-  }, [symbolsKey]); // symbolsKey를 의존성으로 사용
+  }, [symbolsKey]);
 
   return { tickerData, isConnected, error };
 }

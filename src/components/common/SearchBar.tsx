@@ -9,7 +9,7 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
-  placeholder = '원하는 코인을 검색해 보세요',
+  placeholder = 'Search for coins',
   value,
   onChange,
   onSearch,

@@ -1,11 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
-import Header from '../components/layout/Header';
-import { getRanksAllMe, getRanksDaily, getRanksDailyMe } from '../api/ranking';
-import { getRanksAll } from '../api/ranking';
+import { useTranslation } from 'react-i18next';
+import {
+  getRanksAllMe,
+  getRanksDaily,
+  getRanksDailyMe,
+} from '../services/ranking';
+import { getRanksAll } from '../services/ranking';
 import { format } from 'date-fns';
 import { formatCurrency } from '../utils/formatter';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css'; // 블러 효과 스타일 (선택사항)
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import { LOG } from '../config/constants';
 
 interface Rank {
   nickname: string;
@@ -17,10 +22,11 @@ interface Rank {
   updatedAt: string;
 }
 
-type RankingPeriod = '일간' | '전체';
+type RankingPeriod = 'daily' | 'all';
 
 export default function Ranking() {
-  const [activePeriod, setActivePeriod] = useState<RankingPeriod>('일간');
+  const { t } = useTranslation();
+  const [activePeriod, setActivePeriod] = useState<RankingPeriod>('daily');
   const [myUserSticky, setMyUserSticky] = useState<'bottom' | 'top' | null>(
     null,
   );
@@ -33,27 +39,22 @@ export default function Ranking() {
   const [isLoading, setIsLoading] = useState(true);
   const myUserRef = useRef<HTMLDivElement>(null);
 
-  const REFRESH_INTERVAL = 5 * 60 * 1000; // 5분
+  const REFRESH_INTERVAL = 5 * 60 * 1000;
   const PLACEHOLDER = 'https://static.upbit.com/logos/BTC.png';
 
-  // 퍼센트 표시 형식화 함수
   const formatPercentage = (value: number | undefined) => {
     if (value === undefined) return '0.00%';
 
-    // 절대 값이 0인 경우 부호 없이 표시
     if (value === 0) return '0.00%';
 
-    // 부호 추가 및 소수점 두 자리로 고정
     return `${value > 0 ? '+' : ''}${value.toFixed(2)}%`;
   };
 
-  // 이미지 URL 최적화 함수 (선택사항)
   const optimizeImageUrl = (url: string) => {
     if (!url || !url.includes('kakaocdn')) return url;
-    return url.replace('R640x640', 'R160x160'); // 더 작은 이미지 요청
+    return url.replace('R640x640', 'R160x160');
   };
 
-  // 랭킹 데이터 가져오기
   const fetchRanks = async () => {
     setIsLoading(true);
     try {
@@ -72,13 +73,12 @@ export default function Ranking() {
       setDailyUpdatedAt(dailyRanks[0].updatedAt);
       setAllUpdatedAt(allRanks[0].updatedAt);
     } catch (error) {
-      console.error('Failed to fetch rankings:', error);
+      console.error(LOG.ERR.RANKINGS.GET_INFO, error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 초기 데이터 로드 및 5분마다 새로고침
   useEffect(() => {
     fetchRanks();
     const intervalId = setInterval(fetchRanks, REFRESH_INTERVAL);
@@ -94,13 +94,10 @@ export default function Ranking() {
       const windowHeight = window.innerHeight;
 
       if (rect.bottom > windowHeight) {
-        // 내 순위가 화면 아래로 벗어나면 top-0으로 고정
         setMyUserSticky('top');
       } else if (rect.top < 0) {
-        // 내 순위가 화면 위로 벗어나면 bottom-0으로 고정
         setMyUserSticky('bottom');
       } else {
-        // 화면 안에 있으면 고정 해제
         setMyUserSticky(null);
       }
     };
@@ -109,32 +106,26 @@ export default function Ranking() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 현재 활성화된 기간에 따른 랭킹 데이터
-  const currentRanks = activePeriod === '일간' ? ranksDaily : ranks;
-  const currentMyRank = activePeriod === '일간' ? myRankDaily : myRank;
+  const currentRanks = activePeriod === 'daily' ? ranksDaily : ranks;
+  const currentMyRank = activePeriod === 'daily' ? myRankDaily : myRank;
 
-  // 상위 3명과 나머지 유저 분리
   const topUsers = currentRanks.slice(0, 3);
   const otherUsers = currentRanks.slice(3);
 
   if (isLoading && currentRanks.length === 0) {
     return (
       <div className="flex flex-col min-h-screen">
-        <Header title="랭킹" />
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-gray-500">로딩 중...</div>
+          <div className="text-gray-500">{t('common.loading')}</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header title="랭킹" />
-
-      {/* 기간 선택 탭 */}
-      <div className="mx-4 mt-4 flex border-b bg-white sticky top-0 z-10 rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
-        {(['일간', '전체'] as RankingPeriod[]).map((period) => (
+    <div className="flex flex-col h-full bg-white dark:bg-gray-950">
+      <div className="mx-4 mt-4 flex border-b sticky top-0 z-10 rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
+        {(['daily', 'all'] as RankingPeriod[]).map((period) => (
           <button
             key={period}
             className={`flex-1 py-3 text-center ${
@@ -144,15 +135,13 @@ export default function Ranking() {
             }`}
             onClick={() => setActivePeriod(period)}
           >
-            {period}
+            {period === 'daily' ? t('rankings.daily') : t('rankings.allTime')}
           </button>
         ))}
       </div>
 
-      {/* 상위 3명 */}
       <div className="bg-white p-4 py-6 rounded-b-xl mb-4 dark:bg-gray-800 dark:text-white mx-4 shadow-md">
         <div className="flex justify-around items-end">
-          {/* 2등 */}
           <div className="flex flex-col items-center">
             <div className="relative">
               <LazyLoadImage
@@ -170,7 +159,7 @@ export default function Ranking() {
             <div className="mt-2 font-medium">{topUsers[1]?.nickname}</div>
             <div
               className={`text-xs ${
-                activePeriod === '일간'
+                activePeriod === 'daily'
                   ? (topUsers[1]?.profitRate ?? 0) === 0
                     ? 'text-gray-500'
                     : (topUsers[1]?.profitRate ?? 0) > 0
@@ -183,13 +172,12 @@ export default function Ranking() {
                       : 'text-blue-500'
               }`}
             >
-              {activePeriod === '일간'
+              {activePeriod === 'daily'
                 ? formatPercentage(topUsers[1]?.profitRate)
                 : `${(topUsers[1]?.profit ?? 0) > 0 ? '+' : (topUsers[1]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[1]?.profit ?? 0))}`}
             </div>
           </div>
 
-          {/* 1등 */}
           <div className="flex flex-col items-center -mt-4 ">
             <div className="relative">
               <LazyLoadImage
@@ -207,7 +195,7 @@ export default function Ranking() {
             <div className="mt-2 font-medium">{topUsers[0]?.nickname}</div>
             <div
               className={`text-xs ${
-                activePeriod === '일간'
+                activePeriod === 'daily'
                   ? (topUsers[0]?.profitRate ?? 0) === 0
                     ? 'text-gray-500'
                     : (topUsers[0]?.profitRate ?? 0) > 0
@@ -220,13 +208,12 @@ export default function Ranking() {
                       : 'text-blue-500'
               }`}
             >
-              {activePeriod === '일간'
+              {activePeriod === 'daily'
                 ? formatPercentage(topUsers[0]?.profitRate)
                 : `${(topUsers[0]?.profit ?? 0) > 0 ? '+' : (topUsers[0]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[0]?.profit ?? 0))}`}
             </div>
           </div>
 
-          {/* 3등 */}
           <div className="flex flex-col items-center">
             <div className="relative">
               <LazyLoadImage
@@ -244,7 +231,7 @@ export default function Ranking() {
             <div className="mt-2 font-medium">{topUsers[2]?.nickname}</div>
             <div
               className={`text-xs ${
-                activePeriod === '일간'
+                activePeriod === 'daily'
                   ? (topUsers[2]?.profitRate ?? 0) === 0
                     ? 'text-gray-500'
                     : (topUsers[2]?.profitRate ?? 0) > 0
@@ -257,7 +244,7 @@ export default function Ranking() {
                       : 'text-blue-500'
               }`}
             >
-              {activePeriod === '일간'
+              {activePeriod === 'daily'
                 ? formatPercentage(topUsers[2]?.profitRate)
                 : `${(topUsers[2]?.profit ?? 0) > 0 ? '+' : (topUsers[2]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2]?.profit ?? 0))}`}
             </div>
@@ -265,44 +252,32 @@ export default function Ranking() {
         </div>
       </div>
 
-      {/* 랭킹 기간 정보 */}
       <div className="bg-white p-4 border-b rounded-t-xl dark:bg-gray-800 dark:text-white mx-4 dark:border-gray-600">
         <div className="text-gray-500 text-sm dark:text-gray-400 flex flex-col">
           <span>
-            {activePeriod === '일간'
+            {activePeriod === 'daily'
               ? dailyUpdatedAt
-                ? `${format(new Date(dailyUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준`
-                : '업데이트 시간 정보 없음'
+                ? `${t('rankings.asOf')}: ${format(new Date(dailyUpdatedAt), 'yyyy-MM-dd HH:mm')}`
+                : t('rankings.noUpdateInfo')
               : allUpdatedAt
-                ? `${format(new Date(allUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준`
-                : '가입일부터 현재까지'}
+                ? `${t('rankings.asOf')}: ${format(new Date(allUpdatedAt), 'yyyy-MM-dd HH:mm')}`
+                : t('rankings.sinceRegistration')}
           </span>
           {/* <button
             onClick={fetchRanks}
             className="text-blue-500 hover:text-blue-600 text-sm"
           >
-            새로고침
+            Refresh
           </button> */}
         </div>
       </div>
 
-      {/* 나머지 랭킹 */}
       <div className="flex-1 bg-white rounded-b-xl dark:bg-gray-800 dark:text-white mx-4 mb-6 shadow-lg">
         {otherUsers.map((user) => (
           <div
             key={user.rank}
             ref={user === currentMyRank ? myUserRef : null}
-            className={`flex items-center p-4 border-b dark:border-gray-700 ${
-              user === currentMyRank
-                ? `${
-                    myUserSticky === 'top'
-                      ? 'sticky top-0 z-10 bg-blue-50 dark:bg-blue-900'
-                      : myUserSticky === 'bottom'
-                        ? 'sticky bottom-0 z-10 bg-blue-50 dark:bg-blue-900'
-                        : ''
-                  }`
-                : ''
-            }`}
+            className="flex items-center p-4 border-b dark:border-gray-700 last:border-b-0"
           >
             <div className="w-8 text-center font-bold mr-4">{user.rank}</div>
             <LazyLoadImage
@@ -318,7 +293,7 @@ export default function Ranking() {
             </div>
             <div
               className={`text-sm ${
-                activePeriod === '일간'
+                activePeriod === 'daily'
                   ? (user?.profitRate ?? 0) === 0
                     ? 'text-gray-500'
                     : (user?.profitRate ?? 0) > 0
@@ -331,7 +306,7 @@ export default function Ranking() {
                       : 'text-blue-500'
               }`}
             >
-              {activePeriod === '일간'
+              {activePeriod === 'daily'
                 ? formatPercentage(user?.profitRate)
                 : `${(user?.profit ?? 0) > 0 ? '+' : (user?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(user?.profit ?? 0))}`}
             </div>

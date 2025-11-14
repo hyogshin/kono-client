@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import KakaoLoginButton from '../assets/images/kakao_login_medium_wide.png';
-import konoLogo from '../assets/kono_logo.svg';
+import konoLogo from '../assets/images/kono_logo.svg';
 import { useAuth } from '../contexts/AuthContext';
+import { LOG } from '../config/constants';
 
 declare global {
   interface Window {
@@ -11,12 +13,12 @@ declare global {
 }
 
 const Login: React.FC = () => {
+  const { t } = useTranslation();
   const [isKakaoInitialized, setIsKakaoInitialized] = useState(false);
-  const { isAuthenticated, loading } = useAuth(); // AuthContext에서 인증 상태 가져오기
+  const { isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 로그인 상태에 따른 리디렉트 처리
   useEffect(() => {
     const handleLoginPageHistory = () => {
       if (location.pathname === '/login') {
@@ -28,24 +30,20 @@ const Login: React.FC = () => {
     handleLoginPageHistory();
   }, [isAuthenticated, loading, navigate, location]);
 
-  // URL 쿼리 파라미터 확인 (로그인 직후 코드 존재 시)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const hasCode = params.has('code');
 
     if (hasCode) {
-      // 인증 코드가 있는 경우, 히스토리에서 제거
       const cleanUrl = window.location.pathname;
       window.history.replaceState({}, document.title, cleanUrl);
 
-      // 로그인 성공 시 이전에 저장해둔 페이지로 리다이렉트
       const redirectTo = localStorage.getItem('redirectAfterLogin') || '/';
       navigate(redirectTo, { replace: true });
       localStorage.removeItem('redirectAfterLogin');
     }
   }, [navigate]);
 
-  // Kakao SDK 초기화
   useEffect(() => {
     const loadKakaoSDK = () => {
       const script = document.createElement('script');
@@ -58,7 +56,6 @@ const Login: React.FC = () => {
       document.body.appendChild(script);
     };
 
-    // Kakao SDK가 이미 로드되어 있는지 확인
     if (!window.Kakao) {
       loadKakaoSDK();
     } else if (!window.Kakao.isInitialized()) {
@@ -68,7 +65,6 @@ const Login: React.FC = () => {
       setIsKakaoInitialized(true);
     }
 
-    // cleanup
     return () => {
       const script = document.querySelector(
         'script[src="https://developers.kakao.com/sdk/js/kakao.js"]',
@@ -81,60 +77,56 @@ const Login: React.FC = () => {
 
   const handleKakaoLogin = () => {
     if (!isKakaoInitialized) {
-      console.error('Kakao SDK not initialized yet');
+      console.error(LOG.ERR.KAKAO.SDK_NOT_INITIALIZED);
       return;
     }
 
     try {
-      // 현재 URL 저장 (로그인 후 리다이렉트용)
       const prevPath = location.state?.from || '/';
       localStorage.setItem('redirectAfterLogin', prevPath);
       window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/kakao`;
-      // window.Kakao.Auth.authorize({
-      //   redirectUri: import.meta.env.VITE_KAKAO_REDIRECT_URI,
-      //   scope: 'profile_nickname,profile_image',
-      // });
     } catch (error) {
-      console.error('Failed to initiate Kakao login:', error);
+      console.error(LOG.ERR.KAKAO.INITIATE, error);
     }
   };
 
-  // 로딩 중이거나 이미 인증된 상태라면 컴포넌트를 렌더링하지 않음
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        로딩 중...
+        {t('common.loading')}
       </div>
     );
   }
 
   if (isAuthenticated) {
-    return null; // 이미 인증된 경우 아무것도 렌더링하지 않음 (리다이렉트 처리됨)
+    return null;
   }
 
   return (
     <div className="flex flex-col items-center justify-between min-h-screen p-4">
-      {/* 상단 1/3 영역 - 로고 배치 */}
       <div className="flex-1 flex items-end justify-center w-full mb-8">
         <div className="w-full max-w-md">
           <div className="flex flex-col items-center justify-center">
-            <img src={konoLogo} alt="코노 로고" className="w-3/4 mx-auto" />
-            <p className="text-center text-sm text-gray-500 mt-2">
-              코인 놀이터 <strong>코노</strong>에서 실전 투자 감각을 키워보세요
-            </p>
+            <img
+              src={konoLogo}
+              alt={t('auth.konoLogo')}
+              className="w-3/4 mx-auto"
+            />
+            <p
+              className="text-center text-sm text-gray-500 mt-2"
+              dangerouslySetInnerHTML={{ __html: t('auth.welcomeMessage') }}
+            />
           </div>
         </div>
       </div>
 
-      {/* 중간 영역 - 빈 공간 */}
       <div className="flex-1"></div>
 
-      {/* 하단 1/3 영역 - 카카오 로그인 버튼 배치 */}
       <div className="flex-1 flex items-start justify-center w-full mt-8">
         <div className="w-full max-w-md">
           <img
             src={KakaoLoginButton}
-            alt="카카오 로그인"
+            alt={t('auth.kakaoLogin')}
             className={`mx-auto cursor-pointer transition-opacity ${
               isKakaoInitialized
                 ? 'hover:opacity-90'

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/layout/Header';
+import { useTranslation } from 'react-i18next';
 import { ROUTES } from '../config/routes';
 import {
   FaGithub,
@@ -15,45 +15,46 @@ import {
 } from 'react-icons/fa';
 import DarkModeToggle from '../components/theme/DarkModeToggle';
 import Modal from '../components/modal/Modal';
-import { withdrawUser } from '../api/user';
+import { withdrawUser } from '../services/user';
 import { toast } from 'react-toastify';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { LOG, UI } from '../config/constants';
 
 const Settings = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { logout } = useAuth();
   const { darkMode } = useTheme();
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
 
-    // Buy me a beer 스크립트 로드
-    useEffect(() => {
-      const script = document.createElement('script');
-      script.src = 'https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js';
-      script.setAttribute('data-name', 'bmc-button');
-      script.setAttribute('data-slug', '98xb810ibl');
-      script.setAttribute('data-color', '#5F7FFF');
-      script.setAttribute('data-emoji', '🍺');
-      script.setAttribute('data-font', 'Inter');
-      script.setAttribute('data-text', 'Buy me a beer');
-      script.setAttribute('data-outline-color', '#000000');
-      script.setAttribute('data-font-color', '#ffffff');
-      script.setAttribute('data-coffee-color', '#FFDD00');
-      script.async = true;
-      
-      // 스크립트가 이미 존재하는지 확인
-      const existingScript = document.querySelector('script[data-name="bmc-button"]');
-      if (!existingScript) {
-        document.body.appendChild(script);
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js';
+    script.setAttribute('data-name', 'bmc-button');
+    script.setAttribute('data-slug', '98xb810ibl');
+    script.setAttribute('data-color', '#5F7FFF');
+    script.setAttribute('data-emoji', '🍺');
+    script.setAttribute('data-font', 'Inter');
+    script.setAttribute('data-text', 'Buy me a beer');
+    script.setAttribute('data-outline-color', '#000000');
+    script.setAttribute('data-font-color', '#ffffff');
+    script.setAttribute('data-coffee-color', '#FFDD00');
+    script.async = true;
+
+    const existingScript = document.querySelector(
+      'script[data-name="bmc-button"]',
+    );
+    if (!existingScript) {
+      document.body.appendChild(script);
+    }
+
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
       }
-      
-      return () => {
-        // 컴포넌트 언마운트 시 스크립트 제거
-        if (document.body.contains(script)) {
-          document.body.removeChild(script);
-        }
-      };
-    }, []);
+    };
+  }, []);
 
   const openGitHubWiki = () => {
     window.open(
@@ -69,10 +70,10 @@ const Settings = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      toast.success('로그아웃 되었습니다.');
-    } catch (err) {
-      console.error('로그아웃 실패:', err);
-      toast.error('로그아웃 중 오류가 발생했습니다.');
+      toast.success(UI.OK.AUTH.LOGOUT);
+    } catch (error) {
+      console.error(LOG.ERR.USER.LOGOUT, error);
+      toast.error(UI.ERR.USER.LOGOUT);
     }
   };
 
@@ -87,91 +88,80 @@ const Settings = () => {
   const confirmDeleteAccount = async () => {
     try {
       await withdrawUser();
-      toast.success('회원탈퇴가 완료되었습니다.');
+      toast.success(UI.OK.USER.DELETE_ACCOUNT);
       closeDeleteAccountModal();
       window.location.href = ROUTES.AUTH.LOGIN;
-    } catch (err: any) {
-      console.error('회원탈퇴 실패:', err);
-      if (err.response?.status === 401) {
-        toast.error('로그인이 필요합니다.');
-      } else if (err.response?.status === 403) {
-        toast.error('탈퇴 권한이 없습니다.');
+    } catch (error) {
+      console.error(LOG.ERR.USER.DELETE, error);
+      if (error.response?.status === 401) {
+        toast.error(UI.ERR.USER.WITHDRAW_UNAUTHORIZED);
+      } else if (error.response?.status === 403) {
+        toast.error(UI.ERR.USER.WITHDRAW_FORBIDDEN);
       } else {
-        toast.error('회원탈퇴 처리 중 오류가 발생했습니다.');
+        toast.error(UI.ERR.USER.WITHDRAW);
       }
       closeDeleteAccountModal();
     }
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header title="설정" />
-
-      {/* 다크 모드 설정 */}
-      {/* <div className="mx-4 my-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm  border border-gray-200 dark:border-gray-700">
-        <div className="p-4">
+    <div className="flex flex-col bg-white dark:bg-gray-950">
+      <div className="mx-4 my-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+        <div className="p-4 flex items-center">
+          {darkMode ? (
+            <FaMoon className="text-gray-500 dark:text-gray-400 text-xl mr-2" />
+          ) : (
+            <FaSun className="text-gray-500 dark:text-gray-400 text-xl mr-2" />
+          )}
+          <span className="flex-1">{t('settings.darkMode')}</span>
           <DarkModeToggle />
         </div>
-      </div> */}
-        <div className="mx-4 my-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-          <div className="p-4 flex items-center">
-            {darkMode ? (
-              <FaMoon className="text-gray-500 dark:text-gray-400 text-xl mr-3" />
-            ) : (
-              <FaSun className="text-gray-500 dark:text-gray-400 text-xl mr-3" />
-            )}
-            <span className="flex-1">다크 모드</span>
-            <DarkModeToggle />
-          </div>
-        </div>
+      </div>
 
-      {/* 프로필 수정 */}
-      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
+      <div className="mx-4 mb-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm  border border-gray-200 dark:border-gray-700">
         <button
           onClick={() => navigate('/profile')}
           className="w-full text-left p-4 flex items-center"
         >
           <FaUser className="text-gray-500 dark:text-gray-400 mr-3" />
-          <span className="text-base">프로필 수정</span>
+          <span className="text-base">{t('profile.edit')}</span>
         </button>
       </div>
 
-            {/* Buy me a beer 버튼 */}
-            <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
+      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
         <button
           onClick={handleBuyMeABeer}
           className="w-full text-left p-4 flex items-center"
         >
           <FaBeer className="text-gray-500 dark:text-gray-400 mr-3" />
-          <span className="text-base">개발자에게 맥주 사주기</span>
+          <span className="text-base">{t('settings.buyBeer')}</span>
         </button>
       </div>
 
-      {/* 앱 정보 섹션 */}
       <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
         <h2 className="p-4 border-b dark:border-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400">
-          앱 정보
+          {t('settings.appInfo')}
         </h2>
 
-        {/* 개발자 정보 */}
         <button
           onClick={openGitHubWiki}
           className="w-full text-left p-4 flex items-center border-b dark:border-gray-700"
         >
           <FaGithub className="text-gray-500 dark:text-gray-400 mr-3" />
           <div>
-            <span className="text-base block">개발자 정보</span>
+            <span className="text-base block">
+              {t('settings.developerInfo')}
+            </span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
               7-team-secretjuju
             </span>
           </div>
         </button>
 
-        {/* 앱 버전 */}
         <div className="p-4 flex items-center">
           <FaInfoCircle className="text-gray-500 dark:text-gray-400 mr-3" />
           <div>
-            <span className="text-base block">앱 버전</span>
+            <span className="text-base block">{t('settings.appVersion')}</span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
               1.0.0
             </span>
@@ -179,34 +169,30 @@ const Settings = () => {
         </div>
       </div>
 
-      {/* 계정 관리 섹션 */}
       <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
         <h2 className="p-4 border-b dark:border-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400">
-          계정 관리
+          {t('settings.account')}
         </h2>
 
-        {/* 로그아웃 */}
         <button
           onClick={handleLogout}
           className="w-full text-left p-4 flex items-center text-red-500"
         >
           <FaSignOutAlt className="mr-3" />
-          <span className="text-base">로그아웃</span>
+          <span className="text-base">{t('auth.logout')}</span>
         </button>
       </div>
 
-      {/* 회원 탈퇴 */}
-      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
+      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
         <button
           onClick={handleDeleteAccount}
           className="flex items-center w-full text-left p-4 text-red-500"
         >
           <FaUserMinus className="mr-3" />
-          <span className="text-base">회원 탈퇴</span>
+          <span className="text-base">{t('auth.deleteAccount')}</span>
         </button>
       </div>
 
-      {/* 회원 탈퇴 확인 모달 */}
       <Modal
         isOpen={showDeleteAccountModal}
         onClose={closeDeleteAccountModal}
@@ -216,13 +202,13 @@ const Settings = () => {
               onClick={closeDeleteAccountModal}
               className="flex-1 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
-              취소
+              {t('common.cancel')}
             </button>
             <button
               onClick={confirmDeleteAccount}
               className="flex-1 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
             >
-              탈퇴하기
+              {t('auth.deleteAccount')}
             </button>
           </>
         }
@@ -232,16 +218,15 @@ const Settings = () => {
             <FaExclamationTriangle className="text-4xl text-red-500" />
           </div>
           <p className="text-center font-medium dark:text-white">
-            정말 탈퇴하시겠습니까?
+            {t('auth.deleteAccountConfirm')}
           </p>
           <p className="text-center text-gray-600 dark:text-gray-400 text-sm">
-            회원 탈퇴 시 모든 데이터가 삭제되며 <br /> 복구할 수 없습니다.
+            {t('auth.deleteAccountWarning')}
           </p>
         </div>
       </Modal>
 
-      {/* 푸터 */}
-      <div className="mt-auto p-4 text-center text-xs text-gray-500 dark:text-gray-400">
+      <div className=" p-4 text-center text-xs text-gray-500 dark:text-gray-400">
         <p>© 2025 KONO. All rights reserved.</p>
         <p className="mt-1">Made with full heart by Team Secret JuJu</p>
       </div>

@@ -1,14 +1,6 @@
 import { parseISO, format } from 'date-fns';
+import { LOG } from '../config/constants';
 
-/**
- * 숫자를 통화 형식으로 포맷팅
- * 데이터 표기 기준에 따라 소수점 여섯번째 자리까지 표기하며, 소수점이 0인 경우 생략합니다.
- * @param value 포맷팅할 숫자
- * @param currency 통화 단위 (기본값: 'KRW')
- * @param showCurrency 통화 단위 표시 여부 (기본값: true)
- * @param showSign 부호 표시 여부 (기본값: false)
- * @returns 형식의 문자열 예: '100.123456 KRW' 또는 '+123,456'
- */
 export const formatCurrency = (
   value: number,
   currency: string = 'KRW',
@@ -16,21 +8,16 @@ export const formatCurrency = (
   showSign: boolean = false,
   showDecimal: boolean = false,
 ): string => {
-  // 부호 처리
   const sign = showSign && value > 0 ? '+' : '';
   const absValue = Math.abs(value);
 
-  // 소수점 처리 로직
   let formattedValue: string;
 
   if (!showDecimal) {
-    // 소수점 완전히 생략하고 정수만 표시
     formattedValue = Math.floor(absValue).toLocaleString('ko-KR');
   } else if (Number.isInteger(absValue)) {
-    // 정수인 경우 소수점 표시 안함
     formattedValue = absValue.toLocaleString('ko-KR');
   } else {
-    // 소수점이 있는 경우, 필요한 소수점 자리까지만 표시 (최대 6자리)
     const parts = absValue.toString().split('.');
     const integerPart = parseInt(parts[0]).toLocaleString('ko-KR');
 
@@ -39,7 +26,6 @@ export const formatCurrency = (
       decimalPart = decimalPart.substring(0, 6);
     }
 
-    // 소수점 끝의 불필요한 0 제거
     while (decimalPart.endsWith('0')) {
       decimalPart = decimalPart.slice(0, -1);
     }
@@ -48,27 +34,17 @@ export const formatCurrency = (
       decimalPart.length > 0 ? `${integerPart}.${decimalPart}` : integerPart;
   }
 
-  // 부호가 있고 통화 단위 표시가 필요한 경우
   if (sign && showCurrency) {
     return `${sign}${formattedValue}`;
-  }
-  // 부호가 있고 통화 단위 표시가 필요 없는 경우
-  else if (sign) {
+  } else if (sign) {
     return `${sign}${formattedValue}`;
-  }
-  // 통화 단위 표시가 필요한 경우
-  else if (showCurrency) {
+  } else if (showCurrency) {
     return `${formattedValue} ${currency}`;
-  }
-  // 숫자만 표시
-  else {
+  } else {
     return formattedValue;
   }
 };
 
-/**
- * 거래량을 K, M, B 단위로 포맷팅
- */
 export const formatVolume = (value: number): string => {
   if (value >= 1_000_000_000) {
     return `${(value / 1_000_000_000).toFixed(1)}B`;
@@ -80,31 +56,21 @@ export const formatVolume = (value: number): string => {
   return value.toString();
 };
 
-/**
- * 날짜를 표기 기준에 맞게 포맷팅
- * @param date 포맷팅할 Date 객체 또는 날짜 문자열
- * @returns 'YYYY.MM.DD HH:mm' 형식의 문자열
- */
 export const formatDate = (date: string | Date) => {
   try {
-    // 빈 값 체크
     if (date === null || date === undefined || date === '') {
-      return '날짜 없음';
+      return '-';
     }
 
     let dateObj: Date;
 
     if (typeof date === 'string') {
-      // 단순히 parseISO로 파싱 시도
       dateObj = parseISO(date);
 
-      // 유효하지 않은 경우 대체 방법 시도
       if (isNaN(dateObj.getTime())) {
-        // ISO 형식에 Z 추가 시도
         if (date.includes('T') && !date.includes('Z') && !date.includes('+')) {
           dateObj = new Date(date);
         } else {
-          // 마지막으로 그냥 Date 생성자 시도
           dateObj = new Date(date);
         }
       }
@@ -112,54 +78,38 @@ export const formatDate = (date: string | Date) => {
       dateObj = date;
     }
 
-    // 여전히 유효하지 않은 경우
     if (isNaN(dateObj.getTime())) {
-      console.error('유효하지 않은 날짜:', date);
-      return '유효하지 않은 날짜';
+      console.error(LOG.ERR.GENERAL.INVALID_DATE, date);
+      return LOG.ERR.GENERAL.INVALID_DATE;
     }
 
     return format(dateObj, 'yyyy.MM.dd HH:mm');
   } catch (error) {
-    console.error('날짜 형식 변환 오류:', error);
-    return '날짜 형식 오류';
+    console.error(LOG.ERR.GENERAL.FORMAT_DATE, error);
+    return LOG.ERR.GENERAL.FORMAT_DATE;
   }
 };
 
-/**
- * 가격 변동률을 표기 기준에 맞게 포맷팅 (소수점 둘째 자리까지, 소수점이 0인 경우 생략)
- * @param change 변동률 (%)
- * @returns 형식의 문자열 예: '50%' 또는 '50.45%'
- */
 export const formatPriceChange = (change: number): string => {
   const sign = change > 0 ? '+' : '';
 
-  // 정수인지 확인
   if (Number.isInteger(change)) {
     return `${sign}${change}%`;
   }
 
-  // 소수점이 있는 경우 처리
   const fixed = change.toFixed(2);
   const parts = fixed.split('.');
   let decimalPart = parts[1];
 
-  // 소수점 끝의 불필요한 0 제거
   while (decimalPart.endsWith('0')) {
     decimalPart = decimalPart.slice(0, -1);
   }
 
-  // 소수부가 남아있으면 소수점 포함, 아니면 정수만 반환
   return decimalPart.length > 0
     ? `${sign}${parts[0]}.${decimalPart}%`
     : `${sign}${parts[0]}%`;
 };
 
-/**
- * 소수점이 있는 숫자를 포맷팅
- * @param value 포맷팅할 숫자
- * @param decimals 소수점 자릿수 (기본값: 2)
- * @param removeTrailingZeros 소수점 뒤의 0 제거 여부 (기본값: false)
- */
 export const formatDecimal = (
   value: number,
   decimals: number = 2,
@@ -168,7 +118,6 @@ export const formatDecimal = (
   const fixed = value.toFixed(decimals);
 
   if (removeTrailingZeros) {
-    // 소수점 뒤의 0 제거
     if (fixed.includes('.')) {
       const parts = fixed.split('.');
       let decimalPart = parts[1];
@@ -184,31 +133,20 @@ export const formatDecimal = (
   return fixed;
 };
 
-/**
- * 금액에 단위를 붙여 읽기 쉬운 형태로 변환
- * @param value 변환할 금액
- * @param showUnit 단위 표시 여부 (기본값: true)
- */
 export const formatAmount = (
   value: number,
   showUnit: boolean = true,
 ): string => {
   if (value >= 1_000_000_000_000) {
-    return `${Math.floor(value / 1_000_000_000_000)}${showUnit ? '조' : ''}`;
+    return `${Math.floor(value / 1_000_000_000_000)}${showUnit ? 'T' : ''}`;
   } else if (value >= 100_000_000) {
-    return `${Math.floor(value / 100_000_000)}${showUnit ? '억' : ''}`;
+    return `${Math.floor(value / 100_000_000)}${showUnit ? 'B' : ''}`;
   } else if (value >= 10_000) {
-    return `${Math.floor(value / 10_000)}${showUnit ? '만' : ''}`;
+    return `${Math.floor(value / 10_000)}${showUnit ? 'K' : ''}`;
   }
   return value.toLocaleString('ko-KR');
 };
 
-/**
- * 퍼센트 값을 표기 기준에 맞게 포맷팅 (소수점 둘째 자리까지)
- * @param value 포맷팅할 퍼센트 값 (0.5 = 50%)
- * @returns 형식의 문자열 예: '50.00%'
- */
 export const formatPercent = (value: number): string => {
-  // 소수점을 100 곱하고 소수점 둘째 자리까지 표시
   return `${(value * 100).toFixed(2)}%`;
 };

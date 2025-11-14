@@ -22,12 +22,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       id,
       ...props
     },
-    ref
+    ref,
   ) => {
-    // Generate an ID if not provided
     const inputId = id || `input-${Math.random().toString(36).substring(2, 9)}`;
 
-    // Base styles
     const baseInputStyles = `
       bg-white 
       border 
@@ -41,19 +39,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       duration-200
     `;
 
-    // Error or normal state styles
     const stateStyles = error
       ? 'border-accentText focus:border-accentText focus:ring-accentText text-accentText'
       : 'border-gray-300 focus:border-primary focus:ring-primary text-mainText';
 
-    // Width style
     const widthStyle = fullWidth ? 'w-full' : '';
 
-    // Icon padding styles
     const leftPaddingStyle = leftIcon ? 'pl-10' : '';
     const rightPaddingStyle = rightIcon ? 'pr-10' : '';
 
-    // Combine all styles
     const inputStyles = `
       ${baseInputStyles} 
       ${stateStyles} 
@@ -86,7 +80,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             className={inputStyles}
             aria-invalid={error ? 'true' : 'false'}
-            aria-describedby={helperText || error ? `${inputId}-help` : undefined}
+            aria-describedby={
+              helperText || error ? `${inputId}-help` : undefined
+            }
             {...props}
           />
           {rightIcon && (
@@ -107,7 +103,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = 'Input';

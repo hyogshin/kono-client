@@ -1,13 +1,13 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { IoIosClose } from 'react-icons/io';
-import Header from '../components/layout/Header';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount } from '../utils/formatter';
-import { getCoins } from '../api/coin';
+import { getCoins } from '../services/coin';
+import { LOG } from '../config/constants';
 
-// Types
-type SortType = '거래대금' | '가격' | '등락률';
+type SortType = 'volume' | 'price' | 'change';
 
 interface Coin {
   id: string;
@@ -24,15 +24,14 @@ interface CoinInfo {
   coinName: string;
 }
 
-// 상수 정의
-const SORT_TYPES: SortType[] = ['거래대금', '가격', '등락률'];
+const SORT_TYPES: SortType[] = ['volume', 'price', 'change'];
 
 const PLACEHOLDER = 'https://static.upbit.com/logos/BTC.png';
 
 export default function Discover() {
-  // 상태 관리
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState<SortType>('거래대금');
+  const [activeTab, setActiveTab] = useState<SortType>('volume');
   const [coinInfo, setCoinInfo] = useState<CoinInfo[]>([]);
   const [tickers, setTickers] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,7 +39,6 @@ export default function Discover() {
 
   const navigate = useNavigate();
 
-  // 코인 정보 가져오기
   useEffect(() => {
     setIsLoading(true);
     getCoins()
@@ -48,23 +46,20 @@ export default function Discover() {
         const data: CoinInfo[] = res;
         setCoinInfo(data);
 
-        // 티커 목록 추출
         const tickerList = data.map((coin) => coin.ticker);
         setTickers(tickerList);
       })
       .catch((err) => {
-        console.error(`Failed to fetch coin data: ${err}`);
-        setError('코인 정보를 불러오는데 실패했습니다.');
+        console.error(LOG.ERR.COINS.FETCH_DATA, err);
+        setError(t('discover.failedLoad'));
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [t]);
 
-  // 웹소켓 연결
   const { tickerData } = useUpbitWebSocket(tickers);
 
-  // 웹소켓 데이터와 코인 정보 결합
   const coins = useMemo(() => {
     if (!coinInfo.length || !Object.keys(tickerData).length) {
       return [];
@@ -72,9 +67,7 @@ export default function Discover() {
 
     return Object.entries(tickerData)
       .map(([code, data]) => {
-        // KRW-BTC 형식에서 BTC만 추출
         const ticker = code.split('-')[1];
-        // coinInfo에서 해당 티커의 정보 찾기
         const info = coinInfo.find((coin) => coin.ticker === ticker);
 
         if (!info) return null;
@@ -92,7 +85,6 @@ export default function Discover() {
       .filter(Boolean) as Coin[];
   }, [tickerData, coinInfo]);
 
-  // 검색 필터링
   const filteredCoins = useMemo(() => {
     if (!searchTerm.trim()) return coins;
 
@@ -103,12 +95,11 @@ export default function Discover() {
     );
   }, [coins, searchTerm]);
 
-  // 정렬 로직
   const sortedCoins = useMemo(() => {
     return [...filteredCoins].sort((a, b) => {
-      if (activeTab === '거래대금') {
+      if (activeTab === 'volume') {
         return b.accPrice - a.accPrice;
-      } else if (activeTab === '가격') {
+      } else if (activeTab === 'price') {
         return b.price - a.price;
       } else {
         return b.rateChange24h - a.rateChange24h;
@@ -116,7 +107,6 @@ export default function Discover() {
     });
   }, [filteredCoins, activeTab]);
 
-  // 이벤트 핸들러
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -134,20 +124,16 @@ export default function Discover() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header title="탐색" />
-
-      {/* 검색 바 */}
+    <div className="flex flex-col h-full bg-white dark:bg-gray-950">
       <SearchBar
         searchTerm={searchTerm}
         onSearch={handleSearch}
         onClear={handleClearSearch}
+        placeholder={t('discover.searchPlaceholder')}
       />
 
-      {/* 정렬 탭 */}
       <SortTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
-      {/* 코인 리스트 */}
       <CoinList
         coins={sortedCoins}
         isLoading={isLoading}
@@ -158,34 +144,33 @@ export default function Discover() {
   );
 }
 
-// 하위 컴포넌트 분리
-
-// 검색 바 컴포넌트
 function SearchBar({
   searchTerm,
   onSearch,
   onClear,
+  placeholder,
 }: {
   searchTerm: string;
   onSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClear: () => void;
+  placeholder: string;
 }) {
   return (
-    <div className="p-4 sticky top-0 z-10 rounded-xl mb-4">
+    <div className="p-4 z-10 rounded-xl">
       <div className="relative">
         <input
           type="text"
-          placeholder="코인 검색"
-          className="w-full p-3 bg-gray-100 dark:bg-gray-800 rounded-full px-6"
+          placeholder={placeholder}
+          className="w-full p-3 bg-gray-200 dark:bg-gray-800 rounded-full px-6"
           value={searchTerm}
           onChange={onSearch}
         />
         {searchTerm && (
           <button
-            className="absolute right-3 top-1/2 transform -translate-y-1/2"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 "
             onClick={onClear}
           >
-            <IoIosClose className="text-2xl" />
+            <IoIosClose className="text-2xl text-gray-700" />
           </button>
         )}
       </div>
@@ -193,7 +178,6 @@ function SearchBar({
   );
 }
 
-// 정렬 탭 컴포넌트
 function SortTabs({
   activeTab,
   onTabChange,
@@ -201,8 +185,23 @@ function SortTabs({
   activeTab: SortType;
   onTabChange: (tab: SortType) => void;
 }) {
+  const { t } = useTranslation();
+
+  const getSortLabel = (tab: SortType) => {
+    switch (tab) {
+      case 'volume':
+        return t('discover.sortVolume');
+      case 'price':
+        return t('discover.sortPrice');
+      case 'change':
+        return t('discover.sortChange');
+      default:
+        return tab;
+    }
+  };
+
   return (
-    <div className="flex mx-4 border-b bg-white sticky top-[116px] z-10 rounded-t-xl shadow-sm dark:bg-gray-800 dark:text-white dark:border-gray-700">
+    <div className="flex mx-4 border-b bg-white top-[116px] z-10 rounded-t-xl shadow-sm dark:bg-gray-800 dark:text-white dark:border-gray-700">
       {SORT_TYPES.map((tab) => (
         <button
           key={tab}
@@ -213,14 +212,13 @@ function SortTabs({
           }`}
           onClick={() => onTabChange(tab)}
         >
-          {tab}
+          {getSortLabel(tab)}
         </button>
       ))}
     </div>
   );
 }
 
-// 코인 항목 컴포넌트
 function CoinItem({
   coin,
   onClick,
@@ -228,6 +226,8 @@ function CoinItem({
   coin: Coin;
   onClick: (ticker: string) => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <div
       className="p-4 border-b border-gray-200 bg-white flex items-center dark:border-gray-700 dark:bg-gray-800 dark:text-white last:border-0"
@@ -247,11 +247,13 @@ function CoinItem({
           <span className="text-gray-500 text-sm ml-2">{coin.ticker}</span>
         </div>
         <div className="text-sm text-gray-500">
-          거래대금 {formatAmount(coin.accPrice)}
+          {t('discover.sortVolume')} {formatAmount(coin.accPrice)}
         </div>
       </div>
       <div className="text-right">
-        <div className="font-medium">{coin.price.toLocaleString()} 원</div>
+        <div className="font-medium">
+          {coin.price.toLocaleString()} {t('common.krw')}
+        </div>
         <div
           className={`text-sm ${
             coin.rateChange24h >= 0 ? 'text-red-500' : 'text-blue-500'
@@ -265,7 +267,6 @@ function CoinItem({
   );
 }
 
-// 코인 리스트 컴포넌트
 function CoinList({
   coins,
   isLoading,
@@ -277,10 +278,12 @@ function CoinList({
   error: string | null;
   onCoinClick: (ticker: string) => void;
 }) {
+  const { t } = useTranslation();
+
   if (isLoading) {
     return (
       <div className="mx-4 flex-1 flex items-center justify-center p-8 bg-white rounded-b-xl dark:bg-gray-800 dark:text-white">
-        <p>로딩 중...</p>
+        <p>{t('common.loading')}</p>
       </div>
     );
   }
@@ -296,7 +299,7 @@ function CoinList({
   if (coins.length === 0) {
     return (
       <div className="mx-4 flex-1 flex items-center justify-center p-8 bg-white rounded-b-xl dark:bg-gray-800 dark:text-white">
-        <p>검색 결과가 없습니다.</p>
+        <p>{t('discover.noResults')}</p>
       </div>
     );
   }

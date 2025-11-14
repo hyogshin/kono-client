@@ -5,6 +5,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import Clarity from '@microsoft/clarity';
 import App from './App';
 import './index.css';
+import './i18n/config';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './pages/NotFound.tsx';
 import Wallet from './pages/Wallet.tsx';
@@ -20,42 +21,34 @@ import Login from './pages/Login.tsx';
 import Layout from './components/layout/Layout';
 import AuthLayout from './components/layout/AuthLayout';
 import KakoRedirectHandler from './components/auth/KakoRedirectHandler.tsx';
+import * as Sentry from '@sentry/react';
+import { MockAuthProvider } from './contexts/MockAuthProvider.tsx';
+const isLocalMode = import.meta.env.VITE_LOCAL_MODE === 'true';
 
-import * as Sentry from "@sentry/react"; //npm install @sentry/react @sentry/tracing
-
-// Clarity 초기화
 Clarity.init('r1aim0c7qk');
-
-// 쿠키 동의 설정 (GDPR 준수)
 Clarity.consent();
 
-// AuthContext와 함께 사용하면 좋은 사용자 식별
 const identifyUser = (userId: string, nickname: string) => {
   Clarity.identify(userId, undefined, undefined, nickname);
 };
 
-// 중요 이벤트 태깅
 const setUserTags = (userId: string, userType: string) => {
-  Clarity.setTag("userId", userId);
-  Clarity.setTag("userType", userType);
-  Clarity.setTag("platform", "web");
+  Clarity.setTag('userId', userId);
+  Clarity.setTag('userType', userType);
+  Clarity.setTag('platform', 'web');
 };
 
-// 주요 이벤트 트래킹
 const trackImportantEvent = (eventName: string) => {
   Clarity.event(eventName);
-  // 중요 세션으로 업그레이드
   Clarity.upgrade(eventName);
 };
 
-// AuthContext에서 사용할 수 있도록 전역으로 노출
 window.clarityHelpers = {
   identifyUser,
   setUserTags,
-  trackImportantEvent
+  trackImportantEvent,
 };
 
-// 타입 정의 추가
 declare global {
   interface Window {
     clarityHelpers: {
@@ -66,17 +59,17 @@ declare global {
   }
 }
 
-// Sentry 초기화 (기존 코드)
 Sentry.init({
-  dsn: "https://9ba5351ae2788a1039d336aeb4b88082@o4509077698707456.ingest.us.sentry.io/4509077976449024",
-  integrations: [
-    Sentry.browserTracingIntegration()
+  dsn: 'https://9ba5351ae2788a1039d336aeb4b88082@o4509077698707456.ingest.us.sentry.io/4509077976449024',
+  integrations: [Sentry.browserTracingIntegration()],
+
+  tracesSampleRate: 1.0,
+  tracePropagationTargets: [
+    'localhost',
+    /^https:\/\/dev.playkono.com\.io\/api/,
   ],
-  // Tracing
-  tracesSampleRate: 1.0, //  Capture 100% of the transactions
-  // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-  tracePropagationTargets: ["localhost", /^https:\/\/dev.playkono.com\.io\/api/]
 });
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -111,11 +104,11 @@ const router = createBrowserRouter([
             element: <Discover />,
           },
           {
-            path: 'favorite',
+            path: 'favorites',
             element: <Favorite />,
           },
           {
-            path: 'ranking',
+            path: 'rankings',
             element: <Ranking />,
           },
           {
@@ -131,7 +124,7 @@ const router = createBrowserRouter([
             element: <Profile />,
           },
           {
-            path: 'transaction',
+            path: 'transactions',
             element: <Transaction />,
           },
           {
@@ -151,9 +144,15 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
+      {isLocalMode ? (
+        <MockAuthProvider>
+          <RouterProvider router={router} />
+        </MockAuthProvider>
+      ) : (
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
+      )}
     </ThemeProvider>
   </React.StrictMode>,
 );

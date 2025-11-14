@@ -1,12 +1,14 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { IoIosClose } from 'react-icons/io';
-import Header from '../components/layout/Header';
 import { formatAmount } from '../utils/formatter';
-import { getFavoriteList } from '../api/favorite';
+import { getFavoriteList } from '../services/favorite';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
+import { LOG } from '../config/constants';
 
 export default function Favorites() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [favoriteList, setFavoriteList] = useState<any[]>([]);
@@ -22,7 +24,6 @@ export default function Favorites() {
     rateChange24h: number;
   }
 
-  // 관심 종목 목록 가져오기
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
@@ -30,7 +31,7 @@ export default function Favorites() {
         setFavoriteList(favorites);
         setIsLoading(false);
       } catch (error) {
-        console.error('Failed to fetch favorites:', error);
+        console.error(LOG.ERR.FAVORITES.GET_LIST, error);
         setIsLoading(false);
       }
     };
@@ -38,11 +39,9 @@ export default function Favorites() {
     fetchFavorites();
   }, []);
 
-  // 티커 목록 생성 및 웹소켓 연결
   const tickers = favoriteList.map((item) => item.ticker);
   const { tickerData } = useUpbitWebSocket(tickers);
 
-  // 웹소켓 데이터와 관심 종목 정보 결합
   const favoriteCoins: CoinData[] = useMemo(() => {
     if (
       !tickerData ||
@@ -69,10 +68,9 @@ export default function Favorites() {
           rateChange24h: data.signed_change_rate * 100 || 0,
         };
       })
-      .filter((coin): coin is CoinData => coin !== null); // null 제거
+      .filter((coin): coin is CoinData => coin !== null);
   }, [tickerData, favoriteList]);
 
-  // 검색 필터링
   const filteredCoins = favoriteCoins.filter(
     (coin) =>
       coin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -80,14 +78,13 @@ export default function Favorites() {
   );
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header title="관심종목" />
-      <div className="p-4 sticky top-0 z-10 rounded-full mb-4">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-950">
+      <div className="p-4 z-10 rounded-full">
         <div className="relative">
           <input
             type="text"
-            placeholder="코인 검색"
-            className="w-full p-3 bg-gray-100 dark:bg-gray-800 rounded-full px-6 dark:text-white"
+            placeholder={t('favorites.searchPlaceholder')}
+            className="w-full p-3 bg-gray-200 dark:bg-gray-800 rounded-full px-6 dark:text-white"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -96,17 +93,18 @@ export default function Favorites() {
               className="absolute right-3 top-1/2 transform -translate-y-1/2"
               onClick={() => setSearchTerm('')}
             >
-              <IoIosClose className="text-2xl" />
+              <IoIosClose className="text-2xl text-gray-700" />
             </button>
           )}
         </div>
       </div>
 
-      {/* 코인 리스트 */}
       <div className="mx-4 rounded-2xl overflow-hidden mb-6 shadow-lg">
         {isLoading ? (
           <div className="p-8 text-center bg-white rounded-xl dark:bg-gray-800">
-            <div className="text-gray-500 dark:text-gray-400">로딩 중...</div>
+            <div className="text-gray-500 dark:text-gray-400">
+              {t('common.loading')}
+            </div>
           </div>
         ) : filteredCoins.length > 0 ? (
           filteredCoins.map((coin) => (
@@ -132,12 +130,12 @@ export default function Favorites() {
                   </span>
                 </div>
                 <div className="text-sm text-gray-500">
-                  거래대금 {formatAmount(coin.accPrice)}
+                  {t('discover.sortVolume')} {formatAmount(coin.accPrice)}
                 </div>
               </div>
               <div className="text-right">
                 <div className="font-medium">
-                  {coin.price.toLocaleString()} 원
+                  {coin.price.toLocaleString()} {t('common.krw')}
                 </div>
                 <div
                   className={`text-sm ${
@@ -153,13 +151,13 @@ export default function Favorites() {
         ) : (
           <div className="p-8 text-center bg-white rounded-xl dark:bg-gray-800">
             <div className="text-gray-500 mb-2 dark:text-gray-400">
-              아직 관심 코인이 없습니다.
+              {t('favorites.noFavorites')}
             </div>
             <button
               className="text-blue-500 font-medium dark:text-blue-400"
               onClick={() => navigate('/discover')}
             >
-              코인 탐색하기
+              {t('favorites.exploreCoins')}
             </button>
           </div>
         )}

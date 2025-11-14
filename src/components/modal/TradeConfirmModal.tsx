@@ -4,20 +4,11 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import Toast from '../common/Toast';
 import PurchaseCompleteModal from './PurchaseCompleteModal';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { formatAmount, formatCurrency } from '../../utils/formatter';
-import { marketBuy, marketSell } from '../../api/trade';
-
-interface TradeConfirmModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  ticker: string;
-  amount: number | undefined;
-  price: number | null;
-  quantity: number;
-  tradeType: 'buy' | 'sell';
-  name: string;
-  // totalAmount: number;
-}
+import { marketBuy, marketSell } from '../../services/trade';
+import { LOG, UI } from '../../config/constants';
+import type { TradeConfirmModalProps } from '../../types';
 
 export default function TradeConfirmModal({
   isOpen,
@@ -29,6 +20,7 @@ export default function TradeConfirmModal({
   quantity,
   name,
 }: TradeConfirmModalProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const panelRef = useRef<HTMLDivElement>(null);
   const [showComplete, setShowComplete] = useState(false);
@@ -36,10 +28,6 @@ export default function TradeConfirmModal({
   const [confirmedPrice, setConfirmedPrice] = useState(0);
   const [confirmedQuantity, setConfirmedQuantity] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
-
-  // 값이 없을 때의 기본값 처리
-  // const safeAmount = amount || 0;
-  // const safePrice = price || 0;
 
   const handleTrade = async () => {
     if (isProcessing) return;
@@ -57,21 +45,23 @@ export default function TradeConfirmModal({
       onClose();
       setShowComplete(true);
     } catch (error) {
-      console.error('거래 실패:', error);
-      setShowToast(true); // 에러 토스트 메시지 표시
+      console.error(LOG.ERR.TRANSACTIONS.TRANSACTION, error);
+      setShowToast(true);
     } finally {
-      setIsProcessing(false); // 처리 완료 플래그 리셋
+      setIsProcessing(false);
     }
   };
 
   const handleCompleteConfirm = () => {
     setShowComplete(false);
-    // Store toast info in sessionStorage before navigation
     sessionStorage.setItem(
       'tradeToast',
       JSON.stringify({
         show: true,
-        message: `${tradeType === 'buy' ? '구매' : '판매'} 주문을 완료했어요.`,
+        message:
+          tradeType === 'buy'
+            ? t('trade.buyCompleted')
+            : t('trade.sellCompleted'),
         timestamp: Date.now(),
       }),
     );
@@ -86,7 +76,7 @@ export default function TradeConfirmModal({
   };
 
   return (
-    <>
+    <div>
       <Transition.Root show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={onClose}>
           <Transition.Child
@@ -114,9 +104,9 @@ export default function TradeConfirmModal({
               >
                 <Dialog.Panel
                   ref={panelRef}
-                  className="relative w-full max-w-[410px] transform bg-white rounded-t-3xl transition-all mx-auto overflow-hidden dark:bg-gray-800 dark:text-white"
+                  className="relative w-full max-w-[400px] transform bg-white rounded-t-3xl transition-all dark:bg-gray-800 dark:text-white"
                 >
-                  {/* X 버튼 */}
+                  {/* Close button */}
                   <button
                     onClick={onClose}
                     className="absolute right-4 top-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -124,8 +114,8 @@ export default function TradeConfirmModal({
                     <XMarkIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                   </button>
 
-                  {/* 스크롤 가능한 컨텐츠 영역 */}
-                  <div className="max-h-[80vh] overflow-y-auto">
+                  {/* Scrollable content area */}
+                  <div className="max-h-[80vh]">
                     <div className="px-6 pb-8">
                       <div className="text-center my-8">
                         <Dialog.Title
@@ -141,20 +131,23 @@ export default function TradeConfirmModal({
                               : 'text-blue-500 dark:text-blue-400'
                           }`}
                         >
-                          {tradeType === 'buy' ? '구매' : '판매'}
+                          {tradeType === 'buy'
+                            ? t('trade.buy')
+                            : t('trade.sell')}
                         </p>
                       </div>
 
                       <div className="space-y-4 mb-8">
                         <div className="flex justify-between items-center">
                           <span className="text-gray-500 dark:text-gray-400">
-                            1 {ticker} 가격
+                            1 {ticker} {t('trade.tickerPrice')}
                           </span>
                           <span>{formatCurrency(price || 0)}</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-gray-500 dark:text-gray-400">
-                            예상 {ticker} 수량
+                            {t('trade.estimatedQuantity')} {ticker}{' '}
+                            {t('trade.quantity')}
                           </span>
                           <span>
                             {formatAmount(quantity)} {ticker}
@@ -162,7 +155,10 @@ export default function TradeConfirmModal({
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-gray-500 dark:text-gray-400">
-                            총 예상 {tradeType === 'buy' ? '구매' : '판매'} 금액
+                            {t('trade.totalEstimatedAmount')}{' '}
+                            {tradeType === 'buy'
+                              ? t('trade.buyAmount')
+                              : t('trade.sellAmount')}
                           </span>
                           <span className="font-medium text-lg">
                             {formatCurrency(amount || 0)}
@@ -176,7 +172,7 @@ export default function TradeConfirmModal({
                           className="flex-1 py-4 rounded-xl bg-gray-100 font-medium text-gray-900 dark:bg-gray-700 dark:text-gray-100     "
                           onClick={onClose}
                         >
-                          닫기
+                          {t('trade.close')}
                         </button>
                         <button
                           type="button"
@@ -189,10 +185,10 @@ export default function TradeConfirmModal({
                           disabled={isProcessing}
                         >
                           {isProcessing
-                            ? '처리중...'
+                            ? t('trade.processing')
                             : tradeType === 'buy'
-                              ? '구매'
-                              : '판매'}
+                              ? t('trade.buy')
+                              : t('trade.sell')}
                         </button>
                       </div>
                     </div>
@@ -218,9 +214,13 @@ export default function TradeConfirmModal({
 
       <Toast
         show={showToast}
-        message={`${tradeType === 'buy' ? '구매' : '판매'}를 완료했어요.`}
+        message={
+          tradeType === 'buy'
+            ? UI.OK.TRANSACTIONS.ORDER_COMPLETE_BUY
+            : UI.OK.TRANSACTIONS.ORDER_COMPLETE_SELL
+        }
         onClose={() => setShowToast(false)}
       />
-    </>
+    </div>
   );
 }

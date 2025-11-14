@@ -1,4 +1,5 @@
 import React, { ButtonHTMLAttributes } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline';
@@ -17,10 +18,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   ...rest
 }) => {
-  // Base styles for all buttons
-  // let baseStyles = `font-pretendardMedium rounded-lg transition-all ${styles.transition}`;
-
-  // 버튼 스타일 클래스 계산
+  const { t } = useTranslation();
   const variantClasses = {
     primary: 'bg-konoBlue text-white hover:bg-blue-600',
     secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300',
@@ -57,7 +55,7 @@ const Button: React.FC<ButtonProps> = ({
       {isLoading ? (
         <div className="flex items-center justify-center">
           <div className="animate-spin h-5 w-5 border-2 border-t-transparent border-white rounded-full mr-2"></div>
-          <span>로딩 중...</span>
+          <span>{t('common.loading')}</span>
         </div>
       ) : (
         children

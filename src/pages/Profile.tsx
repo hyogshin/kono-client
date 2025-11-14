@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   getUserProfile,
   updateProfileImage,
   updateNickname,
-} from '../api/user';
+} from '../services/user';
 import { toast } from 'react-toastify';
 import { useAuth } from '../contexts/AuthContext';
+import { LOG, UI } from '../config/constants';
 
 interface ProfileData {
   nickname: string;
@@ -14,6 +16,7 @@ interface ProfileData {
 }
 
 const Profile: React.FC = () => {
+  const { t } = useTranslation();
   const { user, updateUser } = useAuth();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -24,17 +27,15 @@ const Profile: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const dummyProfile: ProfileData = {
-    nickname: '닉네임',
+    nickname: t('profile.nickname'),
     profileImageUrl: 'https://static.upbit.com/logos/BTC.png',
   };
 
-  // 프로필 정보 로드
   useEffect(() => {
     const loadProfile = async () => {
       try {
         setLoading(true);
 
-        // 1. AuthContext의 사용자 정보가 있으면 사용
         if (user) {
           setProfile({
             nickname: user.nickname,
@@ -45,20 +46,18 @@ const Profile: React.FC = () => {
           return;
         }
 
-        // 2. AuthContext에 사용자 정보가 없으면 API 호출
         const data = await getUserProfile();
         if (data) {
           setProfile(data);
           setError(false);
         } else {
-          // 데이터가 없는 경우 더미 데이터 사용
           setProfile(dummyProfile);
           setNickname(dummyProfile.nickname);
           setError(true);
         }
-      } catch (err) {
-        console.error('프로필 로드 중 오류 발생:', err);
-        // 오류 발생 시 더미 데이터 사용
+      } catch (error) {
+        console.error(LOG.ERR.USER.GET_PROFILE, error);
+
         setProfile(dummyProfile);
         setNickname(dummyProfile.nickname);
         setError(true);
@@ -70,15 +69,14 @@ const Profile: React.FC = () => {
     loadProfile();
   }, [user]);
 
-  // 프로필 이미지 변경 핸들러
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
     const file = files[0];
-    // 이미지 파일 타입 검증
+
     if (!file.type.startsWith('image/')) {
-      toast.error('이미지 파일만 업로드 가능합니다.');
+      toast.error(UI.ERR.USER.UPDATE_PROFILE_IMAGE_INVALID);
       return;
     }
 
@@ -86,52 +84,45 @@ const Profile: React.FC = () => {
       setImageUploading(true);
       await updateProfileImage(file);
 
-      // 프로필 정보 다시 로드
       const updatedProfile = await getUserProfile();
       setProfile(updatedProfile);
 
-      // AuthContext의 사용자 정보도 업데이트
       if (updatedProfile) {
         updateUser({
           profileImageUrl: updatedProfile.profileImageUrl,
         });
       }
 
-      toast.success('프로필 이미지가 업데이트되었습니다.');
-    } catch (err) {
-      toast.error('이미지 업로드에 실패했습니다.');
-      console.error(err);
+      toast.success(UI.OK.USER.UPDATE_PROFILE_IMAGE);
+    } catch (error) {
+      toast.error(UI.ERR.USER.UPDATE_PROFILE_IMAGE);
+      console.error(LOG.ERR.USER.UPDATE_PROFILE_IMAGE, error);
     } finally {
       setImageUploading(false);
     }
   };
 
-  // 닉네임 변경 핸들러
   const handleNicknameSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!nickname.trim()) {
-      toast.error('닉네임을 입력해주세요.');
+      toast.error(UI.ERR.USER.UPDATE_NICKNAME_REQUIRED);
       return;
     }
     try {
       await updateNickname(nickname);
       const updatedProfile = await getUserProfile();
       setProfile(updatedProfile);
-      // AuthContext 사용자 정보 업데이트
+
       if (updatedProfile) {
         updateUser({
           nickname: updatedProfile.nickname,
         });
       }
 
-
       setIsEditingNickname(false);
-      toast.success('닉네임이 업데이트되었습니다.');
-    }
-
-    catch (error: any) {
-
+      toast.success(UI.OK.USER.UPDATE_NICKNAME);
+    } catch (error: any) {
       const { status, message } = error;
 
       switch (status) {
@@ -150,11 +141,12 @@ const Profile: React.FC = () => {
         default:
           toast.error(`[${status}] ${message}`);
       }
-      console.error('닉네임 변경 실패:', { status, message });
+      console.error(LOG.ERR.USER.UPDATE_NICKNAME, {
+        status,
+        message,
+      });
     }
   };
-
-  // 파일 선택 다이얼로그 열기
   const handleImageClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -169,24 +161,17 @@ const Profile: React.FC = () => {
     );
   }
 
-  // profile이 null인 경우 처리
   const displayProfile = profile || dummyProfile;
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      {/* 오류 메시지 표시 영역 */}
+    <div className="p-4 max-w-md mx-auto h-full bg-white dark:bg-gray-950">
       {error && (
         <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-          <p className="text-center">
-            {
-              '프로필 정보를 불러오는 중 문제가 발생했습니다. 임시 프로필이 표시됩니다.'
-            }
-          </p>
+          <p className="text-center">{t('profile.errorLoading')}</p>
         </div>
       )}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="text-center">
-          {/* 프로필 이미지 영역 */}
           <div className="relative inline-block mb-4">
             <input
               type="file"
@@ -197,7 +182,7 @@ const Profile: React.FC = () => {
             />
             <img
               src={displayProfile.profileImageUrl}
-              alt="프로필 이미지"
+              alt={t('profile.profileImage')}
               className="w-32 h-32 rounded-full object-cover border-4 border-gray-200 dark:border-gray-700 cursor-pointer"
               onClick={handleImageClick}
             />
@@ -227,7 +212,6 @@ const Profile: React.FC = () => {
             </div>
           </div>
 
-          {/* 닉네임 영역 */}
           {isEditingNickname ? (
             <form onSubmit={handleNicknameSubmit} className="mb-4">
               <input
@@ -235,14 +219,14 @@ const Profile: React.FC = () => {
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 className="text-lg font-semibold mb-2 text-center block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
-                placeholder="새 닉네임 입력"
+                placeholder={t('profile.newNicknamePlaceholder')}
               />
               <div className="flex gap-2 justify-center">
                 <button
                   type="submit"
                   className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
                 >
-                  저장
+                  {t('common.save')}
                 </button>
                 <button
                   type="button"
@@ -252,7 +236,7 @@ const Profile: React.FC = () => {
                   }}
                   className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                 >
-                  취소
+                  {t('common.cancel')}
                 </button>
               </div>
             </form>
