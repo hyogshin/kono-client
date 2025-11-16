@@ -81,23 +81,23 @@
 <table>
   <tr>
     <td align="center">
-      <img src="https://github.com/hyogshin.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px;"/><br/>
+      <img src="https://github.com/hyogshin.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px; min-height: 100px; max-height: 100px;"/><br/>
       <b><a href="https://github.com/hyogshin">Hayden</a></b>
     </td>
     <td align="center">
-      <img src="https://github.com/from-minju.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px;"/><br/>
+      <img src="https://github.com/from-minju.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px; min-height: 100px; max-height: 100px;"/><br/>
       <b><a href="https://github.com/from-minju">Jenny</a></b>
     </td>
     <td align="center">
-      <img src="https://github.com/keen1014.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px;"/><br/>
+      <img src="https://github.com/keen1014.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px; min-height: 100px; max-height: 100px;"/><br/>
       <b><a href="https://github.com/keen1014">Keen</a></b>
     </td>
     <td align="center">
-      <img src="https://github.com/yosep98.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px;"/><br/>
+      <img src="https://github.com/yosep98.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px; min-height: 100px; max-height: 100px;"/><br/>
       <b><a href="https://github.com/yosep98">Sep</a></b>
     </td>
     <td align="center">
-      <img src="https://github.com/availrum.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px;"/><br/>
+      <img src="https://github.com/availrum.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px; min-height: 100px; max-height: 100px;"/><br/>
       <b><a href="https://github.com/availrum">June</a></b>
     </td>
   </tr>
