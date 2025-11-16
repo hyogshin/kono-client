@@ -16,7 +16,7 @@
 
 ---
 
-<img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/1.png" alt="KONO App Preview" width="90%"/>
+<img src="./assets/discover.gif" alt="KONO App Preview" width="90%"/>
 
 </div>
 
@@ -28,14 +28,49 @@
 > **KONO** (short for _Coin Noriteo_, meaning “Coin Playground”) is a **crypto trading simulator** where users can experience real-time cryptocurrency trading using **virtual assets**.
 > Users can practice buying and selling various coins without risking real money, allowing them to safely overcome the challenges of the crypto market such as **mindless investing, high entry barriers, and real-trade risks** within a learning environment.
 
-### Core Features
+## 📱 Features
 
-- **Coin Explorer**: Real-time prices and sorting for 163 cryptocurrencies
-- **User Portfolio**: Visualized profit rate and list of owned coins <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/2.png" width="100%"/>
-- **Coin Details**: Provides charts, price info (open, high, low), and more
-- **Trading System**: Receive ₩10,000,000 in virtual assets upon signup, trade in real time
-- **Watchlist**: Quick access to favorite coins and live prices <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/3.png" width="100%"/>
-- **Global/Daily Rankings**: Leaderboards based on investment performance <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/4.png" width="100%"/>
+<div align="center">
+
+### 🔍 Coin Explorer
+
+**Real-time prices and sorting for 163 cryptocurrencies**
+
+<img src="./assets/discover.gif" alt="Coin Explorer" width="80%"/>
+
+<br/><br/>
+
+### 💼 Portfolio Management
+
+**Visualized profit rate, wallet, transaction history, and favorites**
+
+<img src="./assets/fav,wallet,history.gif" alt="Portfolio Management" width="80%"/>
+
+<br/><br/>
+
+### 📊 Trading System
+
+**Buy and sell cryptocurrencies with ₩10,000,000 virtual assets**
+
+<img src="./assets/sell.gif" alt="Trading System" width="80%"/>
+
+<br/><br/>
+
+### 🏆 Global Rankings
+
+**Compete with traders worldwide and track daily performance**
+
+<img src="./assets/rankings.gif" alt="Rankings" width="80%"/>
+
+<br/><br/>
+
+### ⚙️ Settings & Customization
+
+**Dark mode, language settings, and personalized preferences**
+
+<img src="./assets/settings.gif" alt="Settings" width="80%"/>
+
+</div>
 
 <br/>
 <br/>
@@ -46,23 +81,23 @@
 <table>
   <tr>
     <td align="center">
-      <img src="https://github.com/hyogshin.png" width="100" height="100" style="border-radius: 50%;"/><br/>
+      <img src="https://github.com/hyogshin.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px;"/><br/>
       <b><a href="https://github.com/hyogshin">Hayden</a></b>
     </td>
     <td align="center">
-      <img src="https://github.com/from-minju.png" width="100" height="100" style="border-radius: 50%;"/><br/>
+      <img src="https://github.com/from-minju.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px;"/><br/>
       <b><a href="https://github.com/from-minju">Jenny</a></b>
     </td>
     <td align="center">
-      <img src="https://github.com/keen1014.png" width="100" height="100" style="border-radius: 50%;"/><br/>
+      <img src="https://github.com/keen1014.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px;"/><br/>
       <b><a href="https://github.com/keen1014">Keen</a></b>
     </td>
     <td align="center">
-      <img src="https://github.com/yosep98.png" width="100" height="100" style="border-radius: 50%;"/><br/>
+      <img src="https://github.com/yosep98.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px;"/><br/>
       <b><a href="https://github.com/yosep98">Sep</a></b>
     </td>
     <td align="center">
-      <img src="https://github.com/availrum.png" width="100" height="100" style="border-radius: 50%;"/><br/>
+      <img src="https://github.com/availrum.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px;"/><br/>
       <b><a href="https://github.com/availrum">June</a></b>
     </td>
   </tr>
