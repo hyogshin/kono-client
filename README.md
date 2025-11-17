@@ -5,17 +5,12 @@
   <a href="https://github.com/hyogshin"><img src="https://img.shields.io/badge/maintainer-@hyogshin-FDB022?style=flat" alt="Maintainer"/></a>
   <img src="https://img.shields.io/badge/website-down-red?style=flat" alt="Website"/>
   <img src="https://img.shields.io/badge/initial_commit-17_Feb_2025-17A2B8?style=flat" alt="Initial Commit"/>
-  <img src="https://img.shields.io/badge/last_updated-17_Nov_2025-0969da?style=flat" alt="Last Updated"/>
 </div>
-
 <div>
+  <img src="https://img.shields.io/badge/last_updated-17_Nov_2025-0969da?style=flat" alt="Last Updated"/>
   <img src="https://img.shields.io/github/contributors/hyogshin/kono-client?style=flat&color=orange" alt="Contributors"/>
   <img src="https://img.shields.io/badge/license-all_rights_reserved-red?style=flat" alt="License"/>
 </div>
-
----
-
-[Live Demo (down)](https://playkono.com/) • [Documentation](#table-of-contents) • [Issues](https://github.com/hyogshin/kono-client/issues) • [Team](#team)
 
 <img src="./assets/discover.gif" alt="Kono Platform Demo" width="100%"/>
 
@@ -48,11 +43,21 @@
 
 ### Production Achievements
 
-- **Successfully deployed to production** (31/03/2025 - 03/05/2025)
-- **Sub-second latency** for real-time price updates
-- **163+ cryptocurrencies** tracked in real-time via WebSocket
-- **Global ranking system** with Redis-backed leaderboards
-- **Live user engagement** with trading competitions and daily rankings
+<table>
+  <tr>
+    <td width="60%" valign="top">
+      <ul>
+        <li><b>Successfully deployed to production</b> (31/03/2025 - 03/05/2025)</li>
+        <li><b>Organised a self-hosted trading competition</b> with a coffee prize to drive user engagement</li>
+        <li><b>120 active users</b> during peak event period tracked via Google Analytics and Microsoft Clarity</li>
+        <li><b>10+ minutes average session time</b> demonstrating high user engagement</li>
+      </ul>
+    </td>
+    <td width="40%" align="center">
+      <img src="./assets/poster.png" alt="Trading Competition Poster" width="100%"/>
+    </td>
+  </tr>
+</table>
 
 ## ✨ Key Features
 
@@ -60,52 +65,40 @@
 
 <table>
   <tr>
-    <th width="50%">Feature</th>
-    <th width="50%">Demo</th>
+    <th width="50%">Real-Time Market Explorer</th>
+    <th width="50%">Portfolio Management Dashboard</th>
   </tr>
   <tr>
-    <td>
-      <h4>Real-Time Market Explorer</h4>
-      <p>Live price streaming for 163+ cryptocurrencies with WebSocket integration</p>
-    </td>
     <td>
       <img src="./assets/discover.gif" alt="Market Explorer" width="100%"/>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <h4>Portfolio Management Dashboard</h4>
-      <p>Comprehensive wallet visualisation, transaction history, and performance analytics</p>
+      <p><i>Live price streaming for 163+ cryptocurrencies with WebSocket integration</i></p>
     </td>
     <td>
       <img src="./assets/fav,wallet,history.gif" alt="Portfolio Management" width="100%"/>
+      <p><i>Comprehensive wallet visualisation, transaction history, and performance analytics</i></p>
     </td>
   </tr>
   <tr>
-    <td>
-      <h4>Advanced Trading System</h4>
-      <p>Instant buy/sell execution with order history and real-time balance updates</p>
-    </td>
+    <th width="50%">Advanced Trading System</th>
+    <th width="50%">Global Leaderboards</th>
+  </tr>
+  <tr>
     <td>
       <img src="./assets/sell.gif" alt="Trading Interface" width="100%"/>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <h4>Global Leaderboards</h4>
-      <p>Redis-powered ranking system with daily and all-time performance tracking</p>
+      <p><i>Instant buy/sell execution with order history and real-time balance updates</i></p>
     </td>
     <td>
       <img src="./assets/rankings.gif" alt="Rankings" width="100%"/>
+      <p><i>Redis-powered ranking system with daily and all-time performance tracking</i></p>
     </td>
   </tr>
   <tr>
-    <td>
-      <h4>User Customisation</h4>
-      <p>Dark mode, i18n support (EN/KO), and personalised preferences</p>
-    </td>
-    <td>
-      <img src="./assets/settings.gif" alt="Settings" width="100%"/>
+    <th colspan="2">User Customisation</th>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <img src="./assets/settings.gif" alt="Settings" width="50%"/>
+      <p><i>Dark mode, i18n support (EN/KO), and personalised preferences</i></p>
     </td>
   </tr>
 </table>
@@ -114,7 +107,7 @@
 
 ### Frontend Excellence
 
-- **Type-safe development**: 100% TypeScript coverage with strict mode
+- **Type-safe development**: Full TypeScript implementation with strict type checking
 - **Modern React patterns**: Hooks, Context API, custom hooks for WebSocket management
 - **Performance optimisation**: Code splitting, lazy loading, memoisation
 - **Responsive design**: Mobile-first approach with Tailwind CSS
@@ -131,9 +124,8 @@
 ### DevOps & Infrastructure
 
 - **CI/CD Pipeline**: GitHub Actions for automated testing and deployment
-- **Cloud hosting**: AWS infrastructure (EC2, RDS, ElastiCache)
+- **Cloud hosting**: AWS infrastructure (EC2, RDS, Elastic Beanstalk)
 - **Monitoring**: Prometheus + Grafana for observability
-- **Containerisation**: Docker for consistent environments
 - **Database**: MariaDB for transactional data with optimised queries
 
 ## 🏗️ Architecture
@@ -152,46 +144,29 @@
        │
        ▼
 ┌─────────────┐
-│  WebSocket  │ ◄─── Real-time Price Updates
-│   Server    │
+│   Upbit     │ ◄─── Real-time Price Updates (WebSocket)
+│   API       │
 └─────────────┘
 ```
 
 **Key Design Decisions:**
 
 - Microservices for scalability
-- Event-driven architecture for real-time updates
+- Direct integration with Upbit WebSocket API for real-time cryptocurrency prices
 - Stateless API for horizontal scaling
 - Database optimisation with proper indexing
-- Caching strategy for frequently accessed data
+- Redis caching strategy for frequently accessed data
 
 ## 🛠️ Technology Stack
 
-### Frontend
+**Frontend**  
+<img src="https://img.shields.io/badge/React-18.x-61DAFB?style=flat&logo=react&logoColor=black" alt="React"/> <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat&logo=typescript&logoColor=white" alt="TypeScript"/> <img src="https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?style=flat&logo=tailwind-css&logoColor=white" alt="Tailwind"/>
 
-<div>
-  <img src="https://img.shields.io/badge/React-18.x-61DAFB?style=flat&logo=react&logoColor=black" alt="React"/>
-  <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat&logo=typescript&logoColor=white" alt="TypeScript"/>
-  <img src="https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?style=flat&logo=tailwind-css&logoColor=white" alt="Tailwind"/>
-</div>
+**Backend**  
+<img src="https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=flat&logo=springboot&logoColor=white" alt="Spring Boot"/> <img src="https://img.shields.io/badge/Java-17-007396?style=flat&logo=openjdk&logoColor=white" alt="Java"/> <img src="https://img.shields.io/badge/MariaDB-10.x-003545?style=flat&logo=mariadb&logoColor=white" alt="MariaDB"/> <img src="https://img.shields.io/badge/Redis-7.x-DC382D?style=flat&logo=redis&logoColor=white" alt="Redis"/>
 
-### Backend
-
-<div>
-  <img src="https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=flat&logo=springboot&logoColor=white" alt="Spring Boot"/>
-  <img src="https://img.shields.io/badge/Java-17-007396?style=flat&logo=openjdk&logoColor=white" alt="Java"/>
-  <img src="https://img.shields.io/badge/MariaDB-10.x-003545?style=flat&logo=mariadb&logoColor=white" alt="MariaDB"/>
-  <img src="https://img.shields.io/badge/Redis-7.x-DC382D?style=flat&logo=redis&logoColor=white" alt="Redis"/>
-</div>
-
-### DevOps & Tools
-
-<div>
-  <img src="https://img.shields.io/badge/AWS-Cloud-232F3E?style=flat&logo=amazonaws&logoColor=white" alt="AWS"/>
-  <img src="https://img.shields.io/badge/GitHub_Actions-CI/CD-2088FF?style=flat&logo=githubactions&logoColor=white" alt="GitHub Actions"/>
-  <img src="https://img.shields.io/badge/Prometheus-Monitoring-E6522C?style=flat&logo=prometheus&logoColor=white" alt="Prometheus"/>
-  <img src="https://img.shields.io/badge/Grafana-Analytics-F46800?style=flat&logo=grafana&logoColor=white" alt="Grafana"/>
-</div>
+**DevOps & Tools**  
+<img src="https://img.shields.io/badge/AWS-Cloud-232F3E?style=flat&logo=amazonaws&logoColor=white" alt="AWS"/> <img src="https://img.shields.io/badge/GitHub_Actions-CI/CD-2088FF?style=flat&logo=githubactions&logoColor=white" alt="GitHub Actions"/> <img src="https://img.shields.io/badge/Prometheus-Monitoring-E6522C?style=flat&logo=prometheus&logoColor=white" alt="Prometheus"/> <img src="https://img.shields.io/badge/Grafana-Analytics-F46800?style=flat&logo=grafana&logoColor=white" alt="Grafana"/>
 
 ## 🚦 Getting Started
 
@@ -290,62 +265,65 @@ npm run type-check
 
 ## 👥 Team
 
-<div align="center">
+**A collaborative 5-member team that successfully delivered a production-grade trading platform in 11 weeks.**
+
 <table>
   <tr>
-    <td align="center" width="150">
+    <th>Member</th>
+    <th>Role</th>
+    <th>Key Contributions</th>
+  </tr>
+  <tr>
+    <td align="center">
       <a href="https://github.com/hyogshin">
-        <img src="https://github.com/hyogshin.png?s=100" width="100" height="100" alt="Hayden"/><br/>
+        <img src="https://github.com/hyogshin.png?s=100" width="60" height="60" alt="Hayden"/><br/>
         <b>Hayden</b>
       </a>
-      <br/>
-      <sub>FE • DevOps • PM</sub>
     </td>
-    <td align="center" width="150">
+    <td><b>Frontend Lead, DevOps & PM</b></td>
+    <td>WebSocket real-time integration, frontend architecture</td>
+  </tr>
+  <tr>
+    <td align="center">
       <a href="https://github.com/from-minju">
-        <img src="https://github.com/from-minju.png?s=100" width="100" height="100" alt="Jenny"/><br/>
+        <img src="https://github.com/from-minju.png?s=100" width="60" height="60" alt="Jenny"/><br/>
         <b>Jenny</b>
       </a>
-      <br/>
-      <sub>Backend Engineer</sub>
     </td>
-    <td align="center" width="150">
+    <td><b>Backend Engineer</b></td>
+    <td>Ranking API, Redis caching, database optimisation</td>
+  </tr>
+  <tr>
+    <td align="center">
       <a href="https://github.com/keen1014">
-        <img src="https://github.com/keen1014.png?s=100" width="100" height="100" alt="Keen"/><br/>
+        <img src="https://github.com/keen1014.png?s=100" width="60" height="60" alt="Keen"/><br/>
         <b>Keen</b>
       </a>
-      <br/>
-      <sub>Full-stack Engineer</sub>
     </td>
-    <td align="center" width="150">
+    <td><b>Full-stack Engineer</b></td>
+    <td>Trading logic, API integration, full-stack features</td>
+  </tr>
+  <tr>
+    <td align="center">
       <a href="https://github.com/yosep98">
-        <img src="https://github.com/yosep98.png?s=100" width="100" height="100" alt="Sep"/><br/>
+        <img src="https://github.com/yosep98.png?s=100" width="60" height="60" alt="Sep"/><br/>
         <b>Sep</b>
       </a>
-      <br/>
-      <sub>Backend Engineer</sub>
     </td>
-    <td align="center" width="150">
+    <td><b>Backend Engineer</b></td>
+    <td>OAuth2 authentication, S3 architecture, API security</td>
+  </tr>
+  <tr>
+    <td align="center">
       <a href="https://github.com/availrum">
-        <img src="https://github.com/availrum.png?s=100" width="100" height="100" alt="June"/><br/>
+        <img src="https://github.com/availrum.png?s=100" width="60" height="60" alt="June"/><br/>
         <b>June</b>
       </a>
-      <br/>
-      <sub>DevOps Engineer</sub>
     </td>
+    <td><b>DevOps Engineer</b></td>
+    <td>CI/CD pipeline, monitoring</td>
   </tr>
 </table>
-</div>
-
-### Individual Contributions
-
-| Team Member | Key Responsibilities                                                                 |
-| ----------- | ------------------------------------------------------------------------------------ |
-| **Hayden**  | WebSocket-based real-time price collector, frontend architecture, project management |
-| **Jenny**   | Ranking API development, Redis caching implementation, database optimisation         |
-| **Keen**    | Buy/Sell trading logic, API integration, full-stack feature development              |
-| **Sep**     | OAuth2 authentication, S3 presigned URLs, API rate limiting                          |
-| **June**    | CI/CD pipeline setup, Docker containerisation, Prometheus/Grafana monitoring         |
 
 ## 📅 Development Workflow
 
@@ -363,16 +341,14 @@ We follow industry-standard Agile methodologies with structured sprint cycles:
 
 ### Development Practices
 
-- **Agile methodology** with weekly sprints and retrospectives
+- **Agile methodology** with weekly sprints and daily scrums
 - **API-first design** with complete Swagger documentation
-- **100% TypeScript** coverage with strict type checking
 - **Code quality tools**: ESLint + Prettier for consistency
 - **Semantic versioning** with automated releases
 - **Conventional commits** for clear git history
 - **Pull request reviews** before merge to main
 - **Automated CI/CD** testing and deployment
-- **Load testing** for production readiness
-- **Discord integration** for deployment notifications
+- **Discord integration** for Sentry alerts and deployment notifications
 
 ## 🤝 Contributing
 
