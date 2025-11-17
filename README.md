@@ -3,14 +3,14 @@
 <img src="./assets/banner.png" alt="Market Explorer" width="100%"/>
 
 <div>
-  <a href="https://github.com/hyogshin"><img src="https://img.shields.io/badge/maintainer-@hyogshin-FDB022?style=flat" alt="Maintainer"/></a>
-  <img src="https://img.shields.io/badge/website-down-red?style=flat" alt="Website"/>
-  <img src="https://img.shields.io/badge/initial_commit-17_Feb_2025-17A2B8?style=flat" alt="Initial Commit"/>
+  <a href="https://github.com/hyogshin"><img src="https://img.shields.io/badge/Maintainer-@hyogshin-FDB022?style=flat" alt="Maintainer"/></a>
+  <img src="https://img.shields.io/badge/Website-Down-red?style=flat" alt="Website"/>
+  <img src="https://img.shields.io/badge/Initial_commit-17_Feb_2025-17A2B8?style=flat" alt="Initial Commit"/>
 </div>
 <div>
-  <img src="https://img.shields.io/badge/last_updated-17_Nov_2025-0969da?style=flat" alt="Last Updated"/>
-  <img src="https://img.shields.io/github/contributors/hyogshin/kono-client?style=flat&color=orange" alt="Contributors"/>
-  <img src="https://img.shields.io/badge/license-all_rights_reserved-red?style=flat" alt="License"/>
+  <img src="https://img.shields.io/badge/Last_updated-17_Nov_2025-0969da?style=flat" alt="Last Updated"/>
+  <img src="https://img.shields.io/badge/Contributors-5-orange?style=flat" alt="Contributors"/>
+  <img src="https://img.shields.io/badge/License-MIT-red?style=flat" alt="License"/>
 </div>
 
 <img src="./assets/discover.gif" alt="Kono Platform Demo" width="80%"/>
@@ -349,14 +349,17 @@ We follow industry-standard Agile methodologies with structured sprint cycles:
 
 ### Development Practices
 
-- **Agile methodology** with weekly sprints and daily scrums
-- **API-first design** with complete Swagger documentation
-- **Code quality tools**: ESLint + Prettier for consistency
-- **Semantic versioning** with automated releases
-- **Conventional commits** for clear git history
-- **Pull request reviews** before merge to main
-- **Automated CI/CD** testing and deployment
-- **Discord integration** for Sentry alerts and deployment notifications
+<div>
+  <img src="https://img.shields.io/badge/Agile-Weekly_Sprints-20c997?style=flat" alt="Agile"/>
+  <img src="https://img.shields.io/badge/Scrum-Daily-007bff?style=flat" alt="Scrum"/>
+  <img src="https://img.shields.io/badge/API_First-Swagger-6f42c1?style=flat" alt="API First"/>
+  <img src="https://img.shields.io/badge/ESLint-Prettier-4b8bbe?style=flat" alt="ESLint Prettier"/>
+  <img src="https://img.shields.io/badge/Semantic_Versioning-Automated_Releases-17a2b8?style=flat" alt="Semantic Versioning"/>
+  <img src="https://img.shields.io/badge/Conventional_Commits-Git_History-fd7e14?style=flat" alt="Conventional Commits"/>
+  <img src="https://img.shields.io/badge/PR_Reviews-Before_Merge-28a745?style=flat" alt="PR Reviews"/>
+  <img src="https://img.shields.io/badge/CI/CD-Automated_Testing-2088FF?style=flat" alt="CI/CD"/>
+  <img src="https://img.shields.io/badge/Discord-Sentry_Alerts-5865F2?style=flat" alt="Discord Sentry"/>
+</div>
 
 ## 🤝 Contributing
 
