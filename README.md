@@ -1,4 +1,5 @@
 <div align="center">
+<a name="top"></a>
 <img src="./assets/banner.png" alt="Market Explorer" width="100%"/>
 
 <div>
@@ -12,7 +13,7 @@
   <img src="https://img.shields.io/badge/license-all_rights_reserved-red?style=flat" alt="License"/>
 </div>
 
-<img src="./assets/discover.gif" alt="Kono Platform Demo" width="100%"/>
+<img src="./assets/discover.gif" alt="Kono Platform Demo" width="80%"/>
 
 </div>
 
@@ -406,7 +407,5 @@ This project is currently in active development. All rights reserved by the Kono
 For commercial use or collaboration inquiries, please contact the team members.
 
 <div align="center">
-
-[⬆ Back to Top](#-kono---enterprise-grade-crypto-trading-simulator)
-
+[⬆ Back to Top](#top)
 </div>
