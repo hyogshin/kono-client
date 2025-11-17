@@ -159,7 +159,6 @@
 
 **Key Design Decisions:**
 
-- Microservices for scalability
 - Direct integration with Upbit WebSocket API for real-time cryptocurrency prices
 - Stateless API for horizontal scaling
 - Database optimisation with proper indexing
