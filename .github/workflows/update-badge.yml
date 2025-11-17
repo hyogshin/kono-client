@@ -1,0 +1,43 @@
+name: Update README Badge
+
+on:
+  push:
+    branches:
+      - main
+      - docs/readme
+
+jobs:
+  update-badge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update badge date
+        run: |
+          # Get current date in "DD Mon YYYY" format
+          CURRENT_DATE=$(date +"%d_%b_%Y")
+
+          # Update the badge in README.md
+          sed -i "s/last_updated-[0-9]*_[A-Za-z]*_[0-9]*-0969da/last_updated-${CURRENT_DATE}-0969da/g" README.md
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet README.md; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push if changed
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add README.md
+          CURRENT_DATE=$(date +"%d %b %Y")
+          git commit -m "docs: auto-update badge to ${CURRENT_DATE}"
+          git push
