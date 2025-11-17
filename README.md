@@ -33,7 +33,7 @@
 
 ## 📖 About the Project
 
-**Kono** is a production-deployed crypto trading simulator that successfully enabled users to practise trading with £10,000 in virtual assets. Built with enterprise-grade architecture, the platform demonstrates proficiency in modern full-stack development, real-time systems, and cloud infrastructure. The platform was successfully launched in March 2025 and served real users in production.
+**Kono** is a production-deployed crypto trading simulator that enabled users to practise trading with £10,000 in virtual assets. Built with enterprise-grade architecture, the platform demonstrates proficiency in modern full-stack development, real-time systems, and cloud infrastructure. The platform was successfully launched in March 2025 and served real users in production.
 
 ### Business Problem Solved
 
@@ -48,17 +48,22 @@
   <tr>
     <td width="60%" valign="top">
       <ul>
-        <li><b>Successfully deployed to production</b> (31/03/2025 - 03/05/2025)</li>
-        <li><b>Organised a self-hosted trading competition</b> with a coffee prize to drive user engagement</li>
-        <li><b>120 active users</b> during peak event period tracked via Google Analytics and Microsoft Clarity</li>
-        <li><b>10+ minutes average session time</b> demonstrating high user engagement</li>
+        <li><b>Featured as Disquiet Product of the Week #1</b> (Product Hunt alternative) with 4.9/5 user rating</li>
+        <li><b>568 new users acquired</b> with 447 active users during promotional period</li>
+        <li><b>Self-hosted trading competition</b> with coffee prize to drive community engagement</li>
+        <li><b>120 concurrent users at peak</b> during event period</li>
+        <li><b>10+ minutes average session time</b> demonstrating strong user engagement</li>
+        <li><b>89.3% scroll depth</b> indicating minimal user drop-off throughout the application</li>
       </ul>
+      <i>Analytics tracked via Google Analytics and Microsoft Clarity</i>
     </td>
     <td width="40%" align="center">
       <img src="./assets/poster.png" alt="Trading Competition Poster" width="100%"/>
     </td>
   </tr>
 </table>
+
+**Live Period:** 31 Mar - 3 May 2025
 
 ## ✨ Key Features
 
