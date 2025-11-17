@@ -80,25 +80,35 @@
 <div align="center">
 <table>
   <tr>
-    <td align="center">
-      <img src="https://github.com/hyogshin.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px; min-height: 100px; max-height: 100px;"/><br/>
-      <b><a href="https://github.com/hyogshin">Hayden</a></b>
+    <td align="center" width="120">
+      <a href="https://github.com/hyogshin">
+        <img src="https://github.com/hyogshin.png?s=100" width="100px" alt="Hayden"/>
+      </a>
+      <br/><b>Hayden</b>
     </td>
-    <td align="center">
-      <img src="https://github.com/from-minju.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px; min-height: 100px; max-height: 100px;"/><br/>
-      <b><a href="https://github.com/from-minju">Jenny</a></b>
+    <td align="center" width="120">
+      <a href="https://github.com/from-minju">
+        <img src="https://github.com/from-minju.png?s=100" width="100px" alt="Jenny"/>
+      </a>
+      <br/><b>Jenny</b>
     </td>
-    <td align="center">
-      <img src="https://github.com/keen1014.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px; min-height: 100px; max-height: 100px;"/><br/>
-      <b><a href="https://github.com/keen1014">Keen</a></b>
+    <td align="center" width="120">
+      <a href="https://github.com/keen1014">
+        <img src="https://github.com/keen1014.png?s=100" width="100px" alt="Keen"/>
+      </a>
+      <br/><b>Keen</b>
     </td>
-    <td align="center">
-      <img src="https://github.com/yosep98.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px; min-height: 100px; max-height: 100px;"/><br/>
-      <b><a href="https://github.com/yosep98">Sep</a></b>
+    <td align="center" width="120">
+      <a href="https://github.com/yosep98">
+        <img src="https://github.com/yosep98.png?s=100" width="100px" alt="Sep"/>
+      </a>
+      <br/><b>Sep</b>
     </td>
-    <td align="center">
-      <img src="https://github.com/availrum.png" width="100" height="100" style="border-radius: 50%; object-fit: cover; min-width: 100px; max-width: 100px; min-height: 100px; max-height: 100px;"/><br/>
-      <b><a href="https://github.com/availrum">June</a></b>
+    <td align="center" width="120">
+      <a href="https://github.com/availrum">
+        <img src="https://github.com/availrum.png?s=100" width="100px" alt="June"/>
+      </a>
+      <br/><b>June</b>
     </td>
   </tr>
   <tr>
