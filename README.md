@@ -59,11 +59,13 @@
     </td>
     <td width="40%" align="center">
       <img src="./assets/poster.png" alt="Trading Competition Poster" width="100%"/>
+      <br/>
+      <p><b>Live Period:</b> 31 Mar - 3 May 2025</p>
     </td>
   </tr>
 </table>
 
-**Live Period:** 31 Mar - 3 May 2025
+
 
 ## ✨ Key Features
 
