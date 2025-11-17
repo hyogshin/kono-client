@@ -1,22 +1,23 @@
 <div align="center">
+<img src="./assets/banner.png" alt="Market Explorer" width="100%"/>
 
-# 🎮 Kono - Enterprise-Grade Crypto Trading Simulator
+<div>
+  <a href="https://github.com/hyogshin"><img src="https://img.shields.io/badge/maintainer-@hyogshin-FDB022?style=flat" alt="Maintainer"/></a>
+  <img src="https://img.shields.io/badge/website-down-red?style=flat" alt="Website"/>
+  <img src="https://img.shields.io/badge/initial_commit-17_Feb_2025-17A2B8?style=flat" alt="Initial Commit"/>
+  <img src="https://img.shields.io/badge/last_updated-17_Nov_2025-0969da?style=flat" alt="Last Updated"/>
+</div>
 
-> **Kono is a crypto trading simulator designed for investment beginners, providing a safe environment to practise trading strategies. It delivers an educational, risk-free experience that empowers users to learn market dynamics through real-time data and interactive features.**
-
-[![Live Production](https://img.shields.io/badge/Production-playkono.com-4CAF50?style=for-the-badge)](https://playkono.com/)
-[![GitHub Stars](https://img.shields.io/github/stars/hyogshin/kono-client?style=for-the-badge)](https://github.com/hyogshin/kono-client/stargazers)
-[![Issues](https://img.shields.io/github/issues/hyogshin/kono-client?style=for-the-badge)](https://github.com/hyogshin/kono-client/issues)
-[![PRs](https://img.shields.io/github/issues-pr/hyogshin/kono-client?style=for-the-badge)](https://github.com/hyogshin/kono-client/pulls)
-[![TypeScript](https://img.shields.io/badge/TypeScript-100%25-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-
-**Real-time WebSocket • Microservices Architecture • AWS Cloud Infrastructure • CI/CD Pipeline**
-
-[Live Demo](https://playkono.com/) • [Documentation](#table-of-contents) • [Issues](https://github.com/hyogshin/kono-client/issues) • [Team](#team)
+<div>
+  <img src="https://img.shields.io/github/contributors/hyogshin/kono-client?style=flat&color=orange" alt="Contributors"/>
+  <img src="https://img.shields.io/badge/license-all_rights_reserved-red?style=flat" alt="License"/>
+</div>
 
 ---
 
-<img src="./assets/discover.gif" alt="Kono Platform Demo" width="90%"/>
+[Live Demo (down)](https://playkono.com/) • [Documentation](#table-of-contents) • [Issues](https://github.com/hyogshin/kono-client/issues) • [Team](#team)
+
+<img src="./assets/discover.gif" alt="Kono Platform Demo" width="100%"/>
 
 </div>
 
@@ -36,7 +37,7 @@
 
 ## 📖 About the Project
 
-**Kono** is a production-deployed cryptocurrency trading simulator that successfully enabled users to practise trading with £10,000 in virtual assets. Built with enterprise-grade architecture, the platform demonstrates proficiency in modern full-stack development, real-time systems, and cloud infrastructure. The platform was successfully launched in March 2025 and served real users in production until May 2025.
+**Kono** is a production-deployed crypto trading simulator that successfully enabled users to practise trading with £10,000 in virtual assets. Built with enterprise-grade architecture, the platform demonstrates proficiency in modern full-stack development, real-time systems, and cloud infrastructure. The platform was successfully launched in March 2025 and served real users in production.
 
 ### Business Problem Solved
 
@@ -169,34 +170,35 @@
 ### Frontend
 
 <div>
-  <img src="https://img.shields.io/badge/React-18.x-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"/>
-  <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/>
-  <img src="https://img.shields.io/badge/Vite-5.x-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"/>
-  <img src="https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind"/>
+  <img src="https://img.shields.io/badge/React-18.x-61DAFB?style=flat&logo=react&logoColor=black" alt="React"/>
+  <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat&logo=typescript&logoColor=white" alt="TypeScript"/>
+  <img src="https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?style=flat&logo=tailwind-css&logoColor=white" alt="Tailwind"/>
 </div>
 
 ### Backend
 
 <div>
-  <img src="https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot"/>
-  <img src="https://img.shields.io/badge/Java-17-007396?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java"/>
-  <img src="https://img.shields.io/badge/MariaDB-10.x-003545?style=for-the-badge&logo=mariadb&logoColor=white" alt="MariaDB"/>
-  <img src="https://img.shields.io/badge/Redis-7.x-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis"/>
+  <img src="https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=flat&logo=springboot&logoColor=white" alt="Spring Boot"/>
+  <img src="https://img.shields.io/badge/Java-17-007396?style=flat&logo=openjdk&logoColor=white" alt="Java"/>
+  <img src="https://img.shields.io/badge/MariaDB-10.x-003545?style=flat&logo=mariadb&logoColor=white" alt="MariaDB"/>
+  <img src="https://img.shields.io/badge/Redis-7.x-DC382D?style=flat&logo=redis&logoColor=white" alt="Redis"/>
 </div>
 
 ### DevOps & Tools
 
 <div>
-  <img src="https://img.shields.io/badge/AWS-Cloud-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white" alt="AWS"/>
-  <img src="https://img.shields.io/badge/Docker-Containers-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/>
-  <img src="https://img.shields.io/badge/GitHub_Actions-CI/CD-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions"/>
-  <img src="https://img.shields.io/badge/Prometheus-Monitoring-E6522C?style=for-the-badge&logo=prometheus&logoColor=white" alt="Prometheus"/>
-  <img src="https://img.shields.io/badge/Grafana-Analytics-F46800?style=for-the-badge&logo=grafana&logoColor=white" alt="Grafana"/>
+  <img src="https://img.shields.io/badge/AWS-Cloud-232F3E?style=flat&logo=amazonaws&logoColor=white" alt="AWS"/>
+  <img src="https://img.shields.io/badge/GitHub_Actions-CI/CD-2088FF?style=flat&logo=githubactions&logoColor=white" alt="GitHub Actions"/>
+  <img src="https://img.shields.io/badge/Prometheus-Monitoring-E6522C?style=flat&logo=prometheus&logoColor=white" alt="Prometheus"/>
+  <img src="https://img.shields.io/badge/Grafana-Analytics-F46800?style=flat&logo=grafana&logoColor=white" alt="Grafana"/>
 </div>
 
 ## 🚦 Getting Started
 
-### Prerequisites
+<details>
+<summary><b>Prerequisites</b></summary>
+
+<br/>
 
 Ensure you have the following installed:
 
@@ -204,7 +206,12 @@ Ensure you have the following installed:
 - **npm** >= 9.0.0 or **yarn** >= 1.22.0
 - **Git** for version control
 
-### Installation
+</details>
+
+<details>
+<summary><b>Installation</b></summary>
+
+<br/>
 
 ```bash
 # Clone the repository
@@ -228,16 +235,26 @@ yarn dev
 
 The application will be available at `http://localhost:5173`
 
-### Environment Variables
+</details>
+
+<details>
+<summary><b>Environment Variables</b></summary>
+
+<br/>
 
 ```env
 VITE_API_URL=your_backend_api_url
 VITE_WS_URL=your_websocket_url
 ```
 
+</details>
+
 ## 💻 Usage
 
-### Development Commands
+<details>
+<summary><b>Development Commands</b></summary>
+
+<br/>
 
 ```bash
 # Start development server with hot reload
@@ -256,13 +273,20 @@ npm run lint
 npm run type-check
 ```
 
-### Key User Flows
+</details>
+
+<details>
+<summary><b>Key User Flows</b></summary>
+
+<br/>
 
 1. **Sign up** → Receive £10,000 virtual assets
 2. **Browse markets** → View real-time prices for 163+ cryptocurrencies
 3. **Execute trades** → Buy/sell with instant balance updates
 4. **Track portfolio** → Monitor performance and transaction history
 5. **Compete globally** → Climb the leaderboards
+
+</details>
 
 ## 👥 Team
 
@@ -405,13 +429,7 @@ This project is currently in active development. All rights reserved by the Kono
 
 For commercial use or collaboration inquiries, please contact the team members.
 
----
-
 <div align="center">
-
-**Built with modern technologies and best practices**
-
-Built by the [Kono Team](#team)
 
 [⬆ Back to Top](#-kono---enterprise-grade-crypto-trading-simulator)
 
