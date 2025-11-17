@@ -414,5 +414,7 @@ This project is currently in active development. All rights reserved by the Kono
 For commercial use or collaboration inquiries, please contact the team members.
 
 <div align="center">
+  
 [⬆ Back to Top](#top)
+
 </div>
