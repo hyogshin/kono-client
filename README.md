@@ -273,7 +273,7 @@ npm run type-check
 
 ## 👥 Team
 
-**A collaborative 5-member team that successfully delivered a production-grade trading platform in 11 weeks.**
+A collaborative 5 member team that successfully delivered a production-grade trading platform in 11 weeks.
 
 <table>
   <tr>
